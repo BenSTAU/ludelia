@@ -1,0 +1,68 @@
+@font-face {
+    font-family: 'Cinzel';
+    src: url(../assets/font/cinzelFont.ttf) format('truetype');
+}
+@font-face {
+    font-family: "Roboto";
+    src: url(../assets/font/robotoFont.ttf) format('truetype');
+}
+:root {
+    // couleurs
+    --color-primary : #F5DEB3;
+    --color-secondary-dark : #5D4037;
+    --color-secondary-light : #F8F5F0;
+
+    --color-text-primary : #2C1810;
+    --color-text-secondary : #5D4037;
+    --color-text-light : #F8F5F0;
+
+    --color-accent-primary : #8B4513;
+    --color-accent-1 : #DAA520;
+    --color-accent-2 : #B8860B;
+    --color-accent-3 : #D2691E;
+
+    --color-border : #DAA520;
+
+    // font
+    --font-primary : 'Cinzel', serif;
+    --font-secondary : 'Roboto', sans-serif;
+
+    --font-size-lg : '24px'
+
+
+
+}
+
+// Reset de base
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+ul,
+ol {
+    list-style: none;
+}
+
+img {
+    max-width: 100%;
+    display: block;
+}
+
+main {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+button {
+    cursor: pointer;
+    border: none;
+    background: none;
+}
