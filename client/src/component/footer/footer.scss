@@ -1,0 +1,35 @@
+footer {
+  background-color: var(--color-secondary-dark);
+  width: 100%;
+  padding: 1rem;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  gap: 0.5rem;
+
+  div {
+    display: flex;
+    width: 80%;
+    justify-content: center;
+    flex-direction: column;
+
+    h3 {
+        color : var(--color-secondary-light)
+    }
+
+  }
+  h3 {
+      font-family: var(--font-primary);
+      color: var(--color-text-light);
+      letter-spacing: 0.1rem;
+      color: var(--color-accent-1);
+  }
+
+  p {
+    font-family: var(--font-secondary);
+    color: var(--color-text-light);
+    font-size: var(--font-size-xs);
+  }
+}
