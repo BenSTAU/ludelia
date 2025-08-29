@@ -1,6 +1,8 @@
 @font-face {
     font-family: 'Cinzel';
     src: url(../assets/font/cinzelFont.ttf) format('truetype');
+    font-weight: 400; // Regular
+
 }
 @font-face {
     font-family: "Roboto";
@@ -27,8 +29,13 @@
     --font-primary : 'Cinzel', serif;
     --font-secondary : 'Roboto', sans-serif;
 
-    --font-size-lg : '24px'
+    --font-size-lg : 24px;
+    --font-size-md : 20px;
+    --font-size-sm : 16px;
+    --font-size-xs : 14px;
 
+    //cartes de jeu
+    --border-radius : 37px;
 
 
 }
@@ -60,9 +67,24 @@ main {
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    height: 100dvh;
+    background-color: var(--color-primary);
 }
 button {
     cursor: pointer;
     border: none;
     background: none;
+}
+
+h2 {
+    font-family: var(--font-primary);
+    font-size: var(--font-size-md);
+    color: var(--color-text-primary);
+    letter-spacing: 0.1rem;
+
+}
+h3 {
+    font-family: var(--font-secondary);
+    font-size: var(--font-size-sm);
+    color: var(--color-text-secondary);
 }
