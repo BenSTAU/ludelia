@@ -25,9 +25,9 @@ section > div > h2 {
   padding-top: 1rem;
 }
 
-.dragonImage {
+.fairyImage {
   position: absolute;
-  bottom: -20%;
-  left: 70%;
+  top: -13%;
+  left: 10%;
   transform: translateX(-50%);
-}/*# sourceMappingURL=login.css.map */
+}/*# sourceMappingURL=register.css.map */

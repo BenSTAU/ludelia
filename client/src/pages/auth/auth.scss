@@ -1,0 +1,29 @@
+section {
+  min-height: 100dvh;
+  height: auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 2rem;
+  padding: 15dvh 0 10dvh 0 ;
+
+  h1 {
+    font-size: var(--font-size-xxl);
+    color: var(--color-accent-1);
+  }
+
+  > div {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-direction: column;
+    gap: 2rem;
+    width: 100%;
+
+    > h2 {
+      color: var(--color-accent-1);
+      padding-top: 1rem;
+    }
+  }
+}
