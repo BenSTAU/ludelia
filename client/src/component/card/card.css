@@ -1,10 +1,16 @@
 .card {
   position: relative;
   border: 1px solid var(--color-border);
-  border-radius: var(--border-radius);
+  border-radius: var(--border-radius-sm);
   background-color: var(--color-secondary-light);
+  padding: 0.5rem;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
   width: 90%;
-  padding: 1rem;
 }
 .card .cardHeader {
   position: absolute;
@@ -16,4 +22,64 @@
   padding: 0.4rem;
   padding-left: 2rem;
   border-bottom: 1px solid var(--color-border);
+}
+.card label {
+  font-family: var(--label-text-font);
+  font-size: var(--label-text-size);
+  color: var(--color-text-secondary);
+}
+.card input {
+  border-radius: var(--border-radius-sm);
+  padding-left: 1rem;
+  font-size: var(--placeholder-text-size);
+  color: var(--color-text-secondary);
+  height: 30px;
+}
+.card input::-moz-placeholder {
+  color: var(--placeholder-text-color);
+  opacity: 1;
+}
+.card input::placeholder {
+  color: var(--placeholder-text-color);
+  opacity: 1;
+}
+
+.cardAuth form {
+  position: relative;
+  width: 90%;
+  height: 23dvh;
+  padding-bottom: 2rem;
+  display: flex;
+  flex-direction: column;
+}
+.cardAuth form div {
+  display: flex;
+  flex-direction: column;
+}
+.cardAuth form a {
+  font-size: var(--placeholder-text-size);
+  color: var(--color-accent-1);
+  font-family: var(--font-secondary);
+}
+.cardAuth form .btnLogin {
+  position: absolute;
+  background-color: var(--color-accent-1);
+  border: 1px solid var(--color-accent-2);
+  color: var(--color-secondary-light);
+  bottom: -15%;
+  padding: 0.5rem 1rem;
+  border-radius: var(--border-radius-sm);
+  font-family: var(--label-text-font);
+  font-size: var(--label-text-size);
+  color: var(--color-secondary-light);
+  z-index: 10;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.cardGoogle {
+  width: auto;
+}
+.cardGoogle h2 {
+  color: var(--color-text-secondary);
 }/*# sourceMappingURL=card.css.map */

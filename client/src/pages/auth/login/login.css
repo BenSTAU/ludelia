@@ -1,0 +1,18 @@
+section {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  min-height: 100dvh;
+  gap: 2rem;
+}
+section h2 {
+  color: var(--color-accent-1);
+}
+
+.dragonImage {
+  position: absolute;
+  bottom: -25%;
+  left: 70%;
+  transform: translateX(-50%);
+}/*# sourceMappingURL=login.css.map */

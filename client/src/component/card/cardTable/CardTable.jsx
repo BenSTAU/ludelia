@@ -1,11 +1,11 @@
-import "./card.scss";
+import "../card.scss";
 
 export default function Card({
   height,
   backgroundHeader,
   title,
   subtitle,
-  content,
+  children,
 }) {
   return (
     <article className="card" style={{ height: height }}>
@@ -13,7 +13,7 @@ export default function Card({
         <h2>{title}</h2>
         <h3>{subtitle}</h3>
       </div>
-      {content}
+      {children}
     </article>
   );
 }

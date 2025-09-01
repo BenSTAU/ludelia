@@ -17,6 +17,7 @@ export async function registerWithUsernameAndPassword(req, res) {
     if (existingUser.rows.length > 0) {
       return res.status(400).json({ message: "Utilisateur déjà existant" });
     }
+
     //tester avec les regex
     if (!passwordRegex.test(password)) {
       return res.status(400).json({
@@ -34,6 +35,7 @@ export async function registerWithUsernameAndPassword(req, res) {
         .status(400)
         .json({ message: "Le numéro de téléphone est invalide." });
     }
+
 
     //hasher le mot de passe
     const hashedPassword = await bcrypt.hash(password, 10);
@@ -64,6 +66,8 @@ export async function registerWithUsernameAndPassword(req, res) {
     await client.query(insertProviderQuery, [hashedPassword, userId]);
 
     await client.query("COMMIT");
+
+
     // Réponse de la requête positive
     res.status(201).json({ message: "Utilisateur enregistré avec succès" });
   } catch (error) {
@@ -109,7 +113,7 @@ export async function loginWithUsernameAndPassword(req, res) {
     });
     res.status(200).json({ message: "Connexion réussie", token });
   } catch (error) {
-    console.error(error); // affichage complet dans la console
+    console.error(error);
     res.status(500).json({
       message: "Erreur durant la connexion",
       error: error.message || error.toString(),
