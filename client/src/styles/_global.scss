@@ -107,3 +107,11 @@ form {
     }
 
 }
+
+.Toastify__toast-container {
+  position: fixed !important; /* force le toast à flotter */
+  top: 4rem !important;       /* décale sous la nav fixée */
+  right: 1rem !important;
+  z-index: 9999 !important;
+  width: auto !important;     /* pas d’étirement */
+}

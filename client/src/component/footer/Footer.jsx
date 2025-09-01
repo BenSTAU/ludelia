@@ -3,11 +3,11 @@ import "./footer.scss";
 export default function Footer({ adresse, mail }) {
   return (
     <footer>
-      <div>
+      {/* <div>
         <h3>Infos pratiques</h3>
         <p>Lieu : {adresse}</p>
         <p>Mail : {mail}</p>
-      </div>
+      </div> */}
       <h3>
         <a href="">Mentions Légales</a>
       </h3>

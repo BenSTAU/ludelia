@@ -2,12 +2,61 @@ import CardAuth from "../../../component/card/cardAuth/CardAuth";
 import "./register.scss";
 import CardGoogle from "../../../component/card/cardGoogle/CardGoogle";
 import fairy from "../../../assets/image/fairy.svg";
+import { Link, useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+import { useState } from "react";
 
-export default function Login() {
+export default function Register() {
+  const navigate = useNavigate();
+  const [formData, setFormData] = useState({
+    username: "",
+    name: "",
+    surname: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
+    telephone: "",
+  });
+
+  async function handleRegister(event) {
+    event.preventDefault();
+    if (formData.password !== formData.confirmPassword) {
+      toast.error("Les mots de passe ne correspondent pas", {
+        position: "top-center",
+        autoClose: 2000,
+      });
+      return;
+    }
+
+    const response = await fetch(`${import.meta.env.VITE_API_URL}/v1/auth/register`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(formData),
+    });
+    console.log(JSON.stringify(formData));
+    const data = await response.json();
+    if (response.ok) {
+      console.log(data);
+      toast.success(data.message, {
+        position: "top-center",
+        autoClose: 2000,
+      });
+      navigate("/");
+    } else {
+      console.error(data);
+      toast.error(data.message, {
+        position: "top-center",
+        autoClose: 2000,
+      });
+    }
+  }
+
   return (
     <section>
       <div>
-        <h1>Connexion</h1>
+        <h1>Inscription</h1>
         <CardAuth height={"600px"}>
           <div>
             <label htmlFor="username">Nom d'utilisateur</label>
@@ -16,6 +65,7 @@ export default function Login() {
               id="username"
               name="username"
               placeholder="Entrez votre nom d'utilisateur"
+              onChange = {(e) => setFormData({ ...formData, username: e.target.value })}
               required
             />
           </div>
@@ -26,6 +76,7 @@ export default function Login() {
               id="name"
               name="name"
               placeholder="Entrez votre nom"
+              onChange = {(e) => setFormData({ ...formData, name: e.target.value })}
               required
             />
           </div>
@@ -36,6 +87,7 @@ export default function Login() {
               id="surname"
               name="surname"
               placeholder="Entrez votre prénom"
+              onChange = {(e) => setFormData({ ...formData, surname: e.target.value })}
               required
             />
           </div>
@@ -46,6 +98,7 @@ export default function Login() {
               id="email"
               name="email"
               placeholder="Entrez votre email"
+              onChange = {(e) => setFormData({ ...formData, email: e.target.value })}
               required
             />
           </div>
@@ -56,6 +109,7 @@ export default function Login() {
               id="password"
               name="password"
               placeholder="Entrez votre mot de passe"
+              onChange = {(e) => setFormData({ ...formData, password: e.target.value })}
               required
             />
           </div>
@@ -66,6 +120,7 @@ export default function Login() {
               id="confirmPassword"
               name="confirmPassword"
               placeholder="Confirmez votre mot de passe"
+              onChange = {(e) => setFormData({ ...formData, confirmPassword: e.target.value })}
               required
             />
           </div>
@@ -76,14 +131,13 @@ export default function Login() {
               id="telephone"
               name="telephone"
               placeholder="Entrez votre numéro de téléphone"
+              onChange = {(e) => setFormData({ ...formData, telephone: e.target.value })}
               required
             />
           </div>
-          <button className="btn btnRegister">S'inscrire</button>
+          <button onClick={handleRegister} className="btn btnRegister">S'inscrire</button>
           <img src={fairy} alt="dessin d'une fée" className="fairyImage" />
-
-          <a href="#">Mot de passe oublié ?</a>
-          <a href="#">S'inscrire</a>
+          <Link to="/">S'inscrire</Link>
         </CardAuth>
         <h2> Ou </h2>
         <CardGoogle />

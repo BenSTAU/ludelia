@@ -2,22 +2,63 @@ import CardAuth from "../../../component/card/cardAuth/CardAuth";
 import "./login.scss";
 import CardGoogle from "../../../component/card/cardGoogle/CardGoogle";
 import dragon from "../../../assets/image/flyingdragon.svg";
-import { useNavigate, Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useState } from "react";
+import { toast } from "react-toastify";
 
 export default function Login() {
   const navigate = useNavigate();
+  const [formData, setFormData] = useState({
+    emailUsername: "",
+    password: "",
+  });
+
+  async function handleLogin(e) {
+    e.preventDefault();
+
+    const response = await fetch(
+      `${import.meta.env.VITE_API_URL}/v1/auth/login`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      }
+    );
+    const data = await response.json();
+    if (response.ok) {
+      console.log(data);
+      toast.success(data.message, {
+        position: "top-center",
+        autoClose: 2000,
+      });
+      navigate("/landing");
+    } else {
+      console.log(JSON.stringify(formData));
+      console.error(data);
+      toast.error(data.message, {
+        position: "top-center",
+        autoClose: 2000,
+      });
+    }
+  }
+
   return (
     <section>
       <div>
         <h1>Connexion</h1>
         <CardAuth height={"250px"}>
           <div>
-            <label htmlFor="email">Email</label>
+            <label htmlFor="email">Email / Nom d'utilisateur</label>
             <input
               type="email"
               id="email"
               name="email"
               placeholder="Entrez votre email"
+              onChange={(e) =>
+                setFormData({ ...formData, emailUsername: e.target.value })
+              }
               required
             />
           </div>
@@ -28,10 +69,15 @@ export default function Login() {
               id="password"
               name="password"
               placeholder="Entrez votre mot de passe"
+              onChange={(e) =>
+                setFormData({ ...formData, password: e.target.value })
+              }
               required
             />
           </div>
-          <button className="btn btnLogin">Connexion</button>
+          <button onClick={handleLogin} className="btn btnLogin">
+            Connexion
+          </button>
           <img src={dragon} alt="dessin d'un dragon" className="dragonImage" />
           <Link to="/forgot-password">Mot de passe oublié ?</Link>
           <Link to="/register">S'inscrire</Link>

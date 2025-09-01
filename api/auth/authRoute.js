@@ -1,6 +1,7 @@
 import express from "express";
 
 import {
+  ActivateAccount,
   loginWithUsernameAndPassword,
   registerAndLoginWithGoogle,
   registerWithUsernameAndPassword,
@@ -16,3 +17,6 @@ authRouter.post("/login", loginWithUsernameAndPassword);
 
 //register et connexion avec Google
 authRouter.post("/google", registerAndLoginWithGoogle);
+
+//Activation du compte
+authRouter.get("/activate/:token", ActivateAccount);
