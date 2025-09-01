@@ -1,21 +1,20 @@
-import Card from "./component/card/Card";
+import Card from "./component/card/cardTable/CardTable.jsx";
 import Footer from "./component/footer/Footer";
 import Nav from "./component/nav/Nav";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+
+// Pages auth
+import Login from "./pages/auth/login/Login.jsx";
 
 function App() {
   return (
-    <>
+    <Router>
       <Nav />
-      <main>
-        <Card
-          height="200px"
-          backgroundHeader={"var(--color-accent-1)"}
-          title={"Card Title"}
-          subtitle={"Card Subtitle"}
-        />
-      </main>
+      <Routes>
+        <Route path="/" element={<Login />} />
+      </Routes>
       <Footer />
-    </>
+    </Router>
   );
 }
 

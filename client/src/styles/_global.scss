@@ -25,6 +25,8 @@
 
     --color-border : #DAA520;
 
+    --color-input : #EAE9E9;
+
     // font
     --font-primary : 'Cinzel', serif;
     --font-secondary : 'Roboto', sans-serif;
@@ -36,6 +38,13 @@
 
     //cartes de jeu
     --border-radius : 37px;
+    --border-radius-sm : 12px;
+
+    //form
+    --label-text-size : 18px;
+    --label-text-font : 'Cinzel', serif;
+    --placeholder-text-size: 14px; 
+    --placeholder-text-color : #AAA8A8;
 
 
 }
@@ -61,14 +70,10 @@ img {
     max-width: 100%;
     display: block;
 }
-
-main {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    height: 100dvh;
+body {
     background-color: var(--color-primary);
+    color: var(--color-text-primary);
+
 }
 button {
     cursor: pointer;
@@ -87,4 +92,15 @@ h3 {
     font-family: var(--font-secondary);
     font-size: var(--font-size-sm);
     color: var(--color-text-secondary);
+}
+form {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+
+    input {
+        border: none;
+        background-color: var(--color-input);
+    }
+
 }
