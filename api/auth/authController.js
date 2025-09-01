@@ -2,6 +2,7 @@ import pool from "../utils/config.js";
 import bcrypt from "bcrypt";
 import { emailRegex, passwordRegex, phoneRegex } from "../utils/regex.js";
 import jwt from "jsonwebtoken";
+import { htmlActivateAccount, sendEmail } from "../utils/mail.js";
 
 export async function registerWithUsernameAndPassword(req, res) {
   const client = await pool.connect();
@@ -13,9 +14,16 @@ export async function registerWithUsernameAndPassword(req, res) {
     }
     // Vérifier si l'utilisateur existe
     const query = "SELECT * FROM utilisateur WHERE email = $1";
-    const existingUser = await pool.query(query, [email]);
+    const existingUser = await client.query(query, [email]);
     if (existingUser.rows.length > 0) {
       return res.status(400).json({ message: "Utilisateur déjà existant" });
+    }
+    const queryExistingUsername = "SELECT * FROM utilisateur WHERE username = $1";
+    const existingUsername = await client.query(queryExistingUsername, [
+      username
+    ]);
+    if (existingUsername.rows.length > 0) {
+      return res.status(400).json({ message: "Nom d'utilisateur déjà pris" });
     }
 
     //tester avec les regex
@@ -36,17 +44,17 @@ export async function registerWithUsernameAndPassword(req, res) {
         .json({ message: "Le numéro de téléphone est invalide." });
     }
 
-
     //hasher le mot de passe
     const hashedPassword = await bcrypt.hash(password, 10);
 
     //Insérer dans la table Utilisateur
     await client.query("BEGIN");
+    // Enregistrer le token d'activation dans la base de données
 
     const insertUserQuery = `
     INSERT INTO utilisateur (username, email, is_activated, name_user, surname, telephone, id_role) 
     VALUES ($1, $2, false, $3, $4, $5, 1)
-    RETURNING id_utilisateur;`;
+    RETURNING id_utilisateur, activation_token;`;
 
     const result = await client.query(insertUserQuery, [
       username,
@@ -67,6 +75,12 @@ export async function registerWithUsernameAndPassword(req, res) {
 
     await client.query("COMMIT");
 
+    //envoi du mail d'activation
+    const activationToken = result.rows[0].activation_token;
+    const link = `${process.env.CLIENT_URL}/activatemail/${activationToken}`;
+    const html = htmlActivateAccount(surname, link);
+
+    await sendEmail(email, "Activation de votre compte", html);
 
     // Réponse de la requête positive
     res.status(201).json({ message: "Utilisateur enregistré avec succès" });
@@ -82,17 +96,25 @@ export async function registerWithUsernameAndPassword(req, res) {
 
 export async function loginWithUsernameAndPassword(req, res) {
   try {
-    const { email, username, password } = req.body;
+    const { emailUsername, password } = req.body;
+
+    if (!emailUsername || !password) {
+      return res.status(400).json({ message: "Tous les champs sont requis" });
+    }
 
     //Vérifier si le mail ou le nom d'utilisateur existe
     const query =
-      "SELECT * FROM utilisateur JOIN provider ON utilisateur.id_utilisateur = provider.id_utilisateur WHERE email = $1 OR username = $2";
-    const user = await pool.query(query, [email, username]);
+      "SELECT * FROM utilisateur JOIN provider ON utilisateur.id_utilisateur = provider.id_utilisateur WHERE utilisateur.email = $1 or utilisateur.username = $1";
+    const user = await pool.query(query, [emailUsername]);
     if (user.rows.length === 0) {
       return res.status(404).json({ message: "Utilisateur non trouvé" });
     }
-    console.log(user.rows[0]);
-
+    if (!user.rows[0].is_activated) {
+      return res.status(403).json({
+        message:
+          "Compte non activé, veuillez vérifier votre email pour l'activer.",
+      });
+    }
     //vérifier si le mot de passe correspond
     const isMatch = await bcrypt.compare(password, user.rows[0].mdp_hash);
 
@@ -118,6 +140,44 @@ export async function loginWithUsernameAndPassword(req, res) {
       message: "Erreur durant la connexion",
       error: error.message || error.toString(),
     });
+  }
+}
+
+export async function ActivateAccount(req, res) {
+  const client = await pool.connect();
+  try {
+    const { token } = req.params;
+    const query = "SELECT * FROM utilisateur WHERE activation_token = $1";
+    const result = await client.query(query, [token]);
+
+    //Vérification si l'utilisateur existe
+    const user = result.rows[0];
+    if (!user) {
+      return res.status(400).json({ message: "Token invalide ou expiré" });
+    }
+
+    //Vérification si le compte est déjà activé
+    if (user.is_activated) {
+      return res.status(400).json({ message: "Compte déjà activé" });
+    }
+
+    //Activation du compte
+    const updateQuery =
+      "UPDATE utilisateur SET is_activated = true WHERE id_utilisateur = $1";
+    await client.query(updateQuery, [user.id_utilisateur]);
+    const deleteTokenQuery =
+      "UPDATE utilisateur SET activation_token = NULL WHERE id_utilisateur = $1";
+    await client.query(deleteTokenQuery, [user.id_utilisateur]);
+
+    await client.query("COMMIT");
+
+    res.status(200).json({ message: "Compte activé avec succès" });
+  } catch (error) {
+    await client.query("ROLLBACK");
+    console.error("Activation error:", error);
+    res.status(500).json({ message: "Erreur interne du serveur" });
+  } finally {
+    client.release();
   }
 }
 

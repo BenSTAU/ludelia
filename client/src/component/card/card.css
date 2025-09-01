@@ -35,6 +35,9 @@
   color: var(--color-text-secondary);
   height: 30px;
 }
+.card input:focus {
+  outline: 2px solid var(--color-accent-1);
+}
 .card input::-moz-placeholder {
   color: var(--placeholder-text-color);
   opacity: 1;
