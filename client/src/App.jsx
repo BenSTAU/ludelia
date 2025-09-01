@@ -9,7 +9,7 @@ import Login from "./pages/auth/login/Login.jsx";
 import Register from "./pages/auth/register/Register.jsx";
 import Activate from "./pages/auth/activation/Activate.jsx";
 
-import Landing from "./pages/landing/landing.jsx";
+import Landing from "./pages/landing/Landing.jsx";
 
 function App() {
   return (
