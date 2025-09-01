@@ -47,7 +47,7 @@
 .cardAuth form {
   position: relative;
   width: 90%;
-  height: 250px;
+  padding: 1rem;
   padding-bottom: 2rem;
   display: flex;
   flex-direction: column;
@@ -61,12 +61,11 @@
   color: var(--color-accent-1);
   font-family: var(--font-secondary);
 }
-.cardAuth form .btnLogin {
+.cardAuth form .btn {
   position: absolute;
   background-color: var(--color-accent-1);
   border: 1px solid var(--color-accent-2);
   color: var(--color-secondary-light);
-  bottom: -15%;
   padding: 0.5rem 1rem;
   border-radius: var(--border-radius-sm);
   font-family: var(--label-text-font);
@@ -75,6 +74,12 @@
   z-index: 10;
   left: 50%;
   transform: translateX(-50%);
+}
+.cardAuth form .btnLogin {
+  bottom: -12%;
+}
+.cardAuth form .btnRegister {
+  bottom: -5%;
 }
 
 .cardGoogle {

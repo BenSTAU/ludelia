@@ -23,11 +23,4 @@ section > div {
 section > div > h2 {
   color: var(--color-accent-1);
   padding-top: 1rem;
-}
-
-.dragonImage {
-  position: absolute;
-  bottom: -20%;
-  left: 70%;
-  transform: translateX(-50%);
-}/*# sourceMappingURL=login.css.map */
+}/*# sourceMappingURL=auth.css.map */
