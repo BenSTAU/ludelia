@@ -2,7 +2,11 @@ import pool from "../utils/config.js";
 import bcrypt from "bcrypt";
 import { emailRegex, passwordRegex, phoneRegex } from "../utils/regex.js";
 import jwt from "jsonwebtoken";
-import { htmlActivateAccount, sendEmail } from "../utils/mail.js";
+import {
+  htmlActivateAccount,
+  htmlResetPassword,
+  sendEmail,
+} from "../utils/mail.js";
 
 export async function registerWithUsernameAndPassword(req, res) {
   const client = await pool.connect();
@@ -18,9 +22,10 @@ export async function registerWithUsernameAndPassword(req, res) {
     if (existingUser.rows.length > 0) {
       return res.status(400).json({ message: "Utilisateur déjà existant" });
     }
-    const queryExistingUsername = "SELECT * FROM utilisateur WHERE username = $1";
+    const queryExistingUsername =
+      "SELECT * FROM utilisateur WHERE username = $1";
     const existingUsername = await client.query(queryExistingUsername, [
-      username
+      username,
     ]);
     if (existingUsername.rows.length > 0) {
       return res.status(400).json({ message: "Nom d'utilisateur déjà pris" });
@@ -183,12 +188,14 @@ export async function ActivateAccount(req, res) {
 
 export async function resendActivationEmail(req, res) {
   try {
-    const {email} = req.body
+    const { email } = req.body;
 
-    const existingUserQuery = "SELECT * FROM utilisateur WHERE email = $1"
-    const existingUser = await pool.query(existingUserQuery, [email])
+    const existingUserQuery = "SELECT * FROM utilisateur WHERE email = $1";
+    const existingUser = await pool.query(existingUserQuery, [email]);
     if (!existingUser.rows.length > 0) {
-      return res.json({ message : "Si votre email existe, vous recevrez un email d'activation."})
+      return res.json({
+        message: "Si votre email existe, vous recevrez un email d'activation.",
+      });
     }
 
     if (existingUser.rows[0].is_activated) {
@@ -201,8 +208,10 @@ export async function resendActivationEmail(req, res) {
     const html = htmlActivateAccount(surname, link);
 
     await sendEmail(email, "Activation de votre compte", html);
-    
-    res.json({ message: "Si votre email existe, vous recevrez un email d'activation." });
+
+    res.json({
+      message: "Si votre email existe, vous recevrez un email d'activation.",
+    });
   } catch (error) {
     console.error("Resend activation email error:", error);
     res.status(500).json({ message: "Erreur interne du serveur" });
@@ -215,6 +224,102 @@ export async function logout(req, res) {
     res.status(200).json({ message: "Déconnexion réussie" });
   } catch (error) {
     res.status(500).json({ message: "Erreur interne du serveur" });
+  }
+}
+
+export async function forgottenPassword(req, res) {
+  const client = await pool.connect();
+  try {
+    const { emailUsername } = req.body;
+
+    client.query("BEGIN");
+    //Vérifier si le mail ou le nom d'utilisateur existe
+    const query =
+      "SELECT * FROM utilisateur JOIN provider ON utilisateur.id_utilisateur = provider.id_utilisateur WHERE utilisateur.email = $1 or utilisateur.username = $1";
+    const user = await client.query(query, [emailUsername]);
+    if (!user.rows.length > 0) {
+      return res.json({
+        message:
+          "Si vos identifiants existent, vous recevrez un email de réinitialisation.",
+      });
+    }
+
+    //logique de réinitialisation de mot de passe
+    const expireAt = new Date(Date.now() + 60 * 60 * 1000);
+    const queryResetToken =
+      "INSERT INTO reset_tokens (id_utilisateur, expires_at) VALUES ($1, $2) RETURNING token";
+    const result = await client.query(queryResetToken, [
+      user.rows[0].id_utilisateur,
+      expireAt,
+    ]);
+    const token = result.rows[0].token;
+
+    const link = `${process.env.CLIENT_URL}/resetpassword/${token}`;
+    const html = htmlResetPassword(user.rows[0].surname, link);
+    await client.query("COMMIT");
+
+    await sendEmail(
+      user.rows[0].email,
+      "Réinitialisation de votre mot de passe",
+      html
+    );
+
+    res.json({
+      message:
+        "Si vos identifiants existent, vous recevrez un email de réinitialisation.",
+    });
+  } catch (error) {
+    await client.query("ROLLBACK");
+    console.error("Forgotten password error:", error);
+    res.status(500).json({ message: "Erreur interne du serveur" });
+  } finally {
+    client.release();
+  }
+}
+
+export async function resetPassword(req, res) {
+  const client = await pool.connect();
+  try {
+    const { token } = req.params;
+    const { password } = req.body;
+
+    //vérifier le mot de passe
+    if (!password) {
+      return res.status(400).json({ message: "Mot de passe requis." });
+    }
+    if (!passwordRegex.test(password)) {
+      return res.status(400).json({
+        message:
+          "Le mot de passe doit contenir au moins 8 caractères, 1 majuscule, 1 minuscule, 1 chiffre et 1 caractère spécial.",
+      });
+    }
+    await client.query("BEGIN");
+
+    const tokenQuery = "SELECT * FROM reset_tokens WHERE token = $1";
+    const tokenResult = await client.query(tokenQuery, [token]);
+
+    if (tokenResult.rows.length === 0) {
+      return res.status(400).json({ message: "Token invalide." });
+    }
+
+    const expireAt = tokenResult.rows[0].expires_at;
+    if (expireAt < new Date()) {
+      return res.status(400).json({ message: "Token expiré." });
+    }
+
+    const id_utilisateur = tokenResult.rows[0].id_utilisateur;
+    const hashedPassword = await bcrypt.hash(password, 10);
+    const updateQuery =
+      "UPDATE provider SET mdp_hash = $1 WHERE id_utilisateur = $2";
+    await client.query(updateQuery, [hashedPassword, id_utilisateur]);
+
+    await client.query("COMMIT");
+    res.status(200).json({ message: "Mot de passe réinitialisé avec succès." });
+  } catch (error) {
+    await client.query("ROLLBACK");
+    res.status(500).json({ message: "Erreur interne du serveur" });
+  } finally {
+    client.release();
   }
 }
 

@@ -84,6 +84,9 @@
 .cardAuth form .btnRegister {
   bottom: -5%;
 }
+.cardAuth form .btnForgottenPassword {
+  bottom: -15%;
+}
 
 .cardGoogle {
   width: auto;

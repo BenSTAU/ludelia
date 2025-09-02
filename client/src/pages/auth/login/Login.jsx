@@ -58,12 +58,12 @@ export default function Login() {
         <h1>Connexion</h1>
         <CardAuth height={"250px"}>
           <div>
-            <label htmlFor="email">Email / Nom d'utilisateur</label>
+            <label htmlFor="emailUsername">Email / Nom d'utilisateur</label>
             <input
-              type="email"
-              id="email"
-              name="email"
-              placeholder="Entrez votre email"
+              type="text"
+              id="emailUsername"
+              name="emailUsername"
+              placeholder="Entrez votre email ou nom d'utilisateur"
               onChange={(e) =>
                 setFormData({ ...formData, emailUsername: e.target.value })
               }
@@ -87,7 +87,7 @@ export default function Login() {
             Connexion
           </button>
           <img src={dragon} alt="dessin d'un dragon" className="dragonImage" />
-          <Link to="/forgot-password">Mot de passe oublié ?</Link>
+          <Link to="/forgotpassword">Mot de passe oublié ?</Link>
           <Link to="/register">S'inscrire</Link>
         </CardAuth>
         <h2> Ou </h2>

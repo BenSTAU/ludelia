@@ -7,8 +7,10 @@ import { Toaster } from "react-hot-toast";
 import Login from "./pages/auth/login/Login.jsx";
 import Register from "./pages/auth/register/Register.jsx";
 import Activate from "./pages/auth/activation/Activate.jsx";
+import ForgottenPassword from "./pages/auth/password/forgottenPassword.jsx";
 
 import Landing from "./pages/landing/Landing.jsx";
+import ResetPassword from "./pages/auth/password/ResetPassword.jsx";
 
 function App() {
   return (
@@ -20,6 +22,8 @@ function App() {
           <Route path="/register" element={<Register />} />
           <Route path="/activatemail/:token" element={<Activate />} />
           <Route path="/landing" element={<Landing />} />
+          <Route path="/forgotpassword" element={<ForgottenPassword />} />
+          <Route path="/resetpassword/:token" element={<ResetPassword />} />
         </Routes>
         <Toaster />
         <Footer />
