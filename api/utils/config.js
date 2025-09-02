@@ -35,16 +35,17 @@ passport.use(
 
         //chercher l'utilisateur
         const queryUser =
-          "SELECT * FROM utilisateur u JOIN provider p ON u.id_utilisateur = p.id_utilisateur WHERE p.provider_name = $1 AND p.provider_id = $2";
-        const existingUser = await client.query(queryUser, [
-          "google",
-          profile.id,
-        ]);
+          "SELECT * FROM utilisateur u JOIN provider p ON u.id_utilisateur = p.id_utilisateur WHERE p.provider_id = $1 or u.email = $2";
+        const existingUser = await client.query(queryUser, [profile.id, profile.emails[0].value]);
 
-        if (existingUser.rows.length > 0) {
+        if (existingUser.rows.length > 0 && existingUser.rows[0].provider_name === "google") {
           // L'utilisateur existe déjà
           client.release();
           return done(null, existingUser.rows[0]);
+        } else if (existingUser.rows.length > 0 && existingUser.rows[0].provider_name == "classique") {
+          // L'utilisateur existe avec un autre provider
+          client.release();
+          return done(new Error("provider = classique"));
         }
 
         //créer un nouveau utilisateur

@@ -22,6 +22,10 @@ export default function Login() {
         duration: 2000,
       });
       navigate('/');
+    } else if (params.get("google") === "classique") {
+      toast.error("Compte déjà existant, veuillez vous connecter avec vos identifiants", {
+        duration: 2000,
+      });
     }
   }, [location, navigate]);
 
