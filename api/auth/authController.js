@@ -107,7 +107,7 @@ export async function loginWithUsernameAndPassword(req, res) {
       "SELECT * FROM utilisateur JOIN provider ON utilisateur.id_utilisateur = provider.id_utilisateur WHERE utilisateur.email = $1 or utilisateur.username = $1";
     const user = await pool.query(query, [emailUsername]);
     if (user.rows.length === 0) {
-      return res.status(404).json({ message: "Utilisateur non trouvé" });
+      return res.status(404).json({ message: "Identifiants incorrects" });
     }
     if (!user.rows[0].is_activated) {
       return res.status(403).json({
@@ -119,7 +119,7 @@ export async function loginWithUsernameAndPassword(req, res) {
     const isMatch = await bcrypt.compare(password, user.rows[0].mdp_hash);
 
     if (!isMatch) {
-      return res.status(401).json({ message: "Mot de passe incorrect" });
+      return res.status(401).json({ message: "Identifiants incorrects" });
     }
 
     //générer un token JWT
@@ -178,6 +178,43 @@ export async function ActivateAccount(req, res) {
     res.status(500).json({ message: "Erreur interne du serveur" });
   } finally {
     client.release();
+  }
+}
+
+export async function resendActivationEmail(req, res) {
+  try {
+    const {email} = req.body
+
+    const existingUserQuery = "SELECT * FROM utilisateur WHERE email = $1"
+    const existingUser = await pool.query(existingUserQuery, [email])
+    if (!existingUser.rows.length > 0) {
+      return res.json({ message : "Si votre email existe, vous recevrez un email d'activation."})
+    }
+
+    if (existingUser.rows[0].is_activated) {
+      return res.status(400).json({ message: "Compte déjà activé." });
+    }
+
+    // Logique pour renvoyer l'email d'activation
+    const activationToken = existingUser.rows[0].activation_token;
+    const link = `${process.env.CLIENT_URL}/activatemail/${activationToken}`;
+    const html = htmlActivateAccount(surname, link);
+
+    await sendEmail(email, "Activation de votre compte", html);
+    
+    res.json({ message: "Si votre email existe, vous recevrez un email d'activation." });
+  } catch (error) {
+    console.error("Resend activation email error:", error);
+    res.status(500).json({ message: "Erreur interne du serveur" });
+  }
+}
+
+export async function logout(req, res) {
+  try {
+    res.clearCookie("token");
+    res.status(200).json({ message: "Déconnexion réussie" });
+  } catch (error) {
+    res.status(500).json({ message: "Erreur interne du serveur" });
   }
 }
 

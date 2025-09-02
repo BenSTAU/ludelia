@@ -4,7 +4,7 @@ import CardGoogle from "../../../component/card/cardGoogle/CardGoogle";
 import dragon from "../../../assets/image/flyingdragon.svg";
 import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
-import { toast } from "react-toastify";
+import toast from "react-hot-toast";
 
 export default function Login() {
   const navigate = useNavigate();
@@ -16,30 +16,34 @@ export default function Login() {
   async function handleLogin(e) {
     e.preventDefault();
 
-    const response = await fetch(
-      `${import.meta.env.VITE_API_URL}/v1/auth/login`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(formData),
+    const toastId = toast.loading("Connexion en cours...")
+
+    try {
+      const response = 
+        await fetch(`${import.meta.env.VITE_API_URL}/v1/auth/login`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(formData),
+        });
+      const data = await response.json();
+      if (response.ok) {
+        toast.success(data.message, {
+          id: toastId,
+          duration: 2000,
+        });
+        navigate("/landing");
+      } else {
+        toast.error(data.message, {
+          id: toastId,
+          duration: 2000,
+        });
       }
-    );
-    const data = await response.json();
-    if (response.ok) {
-      console.log(data);
-      toast.success(data.message, {
-        position: "top-center",
-        autoClose: 2000,
-      });
-      navigate("/landing");
-    } else {
-      console.log(JSON.stringify(formData));
-      console.error(data);
-      toast.error(data.message, {
-        position: "top-center",
-        autoClose: 2000,
+    } catch (error) {
+      toast.error("Erreur lors de la connexion", {
+        id: toastId,
+        duration: 2000,
       });
     }
   }
