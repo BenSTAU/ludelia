@@ -2,32 +2,45 @@ import CardAuth from "../../../component/card/cardAuth/CardAuth";
 import "./login.scss";
 import CardGoogle from "../../../component/card/cardGoogle/CardGoogle";
 import dragon from "../../../assets/image/flyingdragon.svg";
-import { Link, useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { Link, useNavigate, useLocation } from "react-router-dom";
+import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { handleResendActivationEmail } from "../../../../utils/resendActivationMail";
 
 export default function Login() {
   const navigate = useNavigate();
+  const location = useLocation();
   const [formData, setFormData] = useState({
     emailUsername: "",
     password: "",
   });
 
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    if (params.get("google") === "false") {
+      toast.error("Erreur de connexion avec Google", {
+        duration: 2000,
+      });
+      navigate('/');
+    }
+  }, [location, navigate]);
+
   async function handleLogin(e) {
     e.preventDefault();
 
-    const toastId = toast.loading("Connexion en cours...")
+    const toastId = toast.loading("Connexion en cours...");
 
     try {
-      const response = 
-        await fetch(`${import.meta.env.VITE_API_URL}/v1/auth/login`, {
+      const response = await fetch(
+        `${import.meta.env.VITE_API_URL}/v1/auth/login`,
+        {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
           body: JSON.stringify(formData),
-        });
+        }
+      );
       const data = await response.json();
       if (response.ok) {
         toast.success(data.message, {
