@@ -5,6 +5,7 @@ import dragon from "../../../assets/image/flyingdragon.svg";
 import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import toast from "react-hot-toast";
+import { handleResendActivationEmail } from "../../../../utils/resendActivationMail";
 
 export default function Login() {
   const navigate = useNavigate();
@@ -39,6 +40,9 @@ export default function Login() {
           id: toastId,
           duration: 2000,
         });
+        if (response.status === 403) {
+          handleResendActivationEmail(e, formData.emailUsername, navigate);
+        }
       }
     } catch (error) {
       toast.error("Erreur lors de la connexion", {
