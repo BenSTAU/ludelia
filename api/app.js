@@ -5,6 +5,7 @@ import pool from "./utils/config.js";
 
 //Routers
 import { authRouter } from "./auth/authRoute.js";
+import passport from "passport";
 
 dotenv.config();
 const app = express();
@@ -16,6 +17,7 @@ app.use(
   })
 );
 app.use(express.json());
+app.use(passport.initialize());
 
 //routes
 app.use("/api/v1/auth", authRouter);

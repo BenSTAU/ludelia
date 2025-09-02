@@ -2,8 +2,13 @@ import googleLogo from '../../../assets/image/google.svg'
 import'../card.scss'
 
 export default function CardGoogle() {
+  const handleGoogleLogin = () => {
+    console.log('Google login clicked');
+    window.open(`${import.meta.env.VITE_API_URL}/v1/auth/google`, "_self");
+  };
+
   return (
-    <article className='cardGoogle card'>
+    <button className='cardGoogle card' onClick={handleGoogleLogin}>
         <h2 style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5em' }}>
           Connexion avec
           <img
@@ -11,6 +16,6 @@ export default function CardGoogle() {
             alt="Logo Google"
           />
         </h2>     
-    </article>
+    </button>
   )
 }

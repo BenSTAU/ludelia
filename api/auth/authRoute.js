@@ -5,11 +5,14 @@ import {
   forgottenPassword,
   loginWithUsernameAndPassword,
   logout,
-  registerAndLoginWithGoogle,
   registerWithUsernameAndPassword,
   resendActivationEmail,
   resetPassword,
 } from "./authController.js";
+import {
+  registerAndLoginWithGoogle,
+  googleCallback,
+} from "./authGoogleController.js";
 
 export const authRouter = express.Router();
 
@@ -22,9 +25,6 @@ authRouter.post("/login", loginWithUsernameAndPassword);
 //Déconnexion
 authRouter.post("/logout", logout);
 
-//register et connexion avec Google
-authRouter.post("/google", registerAndLoginWithGoogle);
-
 //Activation du compte
 authRouter.get("/activate/:token", ActivateAccount);
 
@@ -34,3 +34,7 @@ authRouter.post("/resendactivation", resendActivationEmail);
 //Réinitialisation du mot de passe
 authRouter.post("/forgotpassword", forgottenPassword);
 authRouter.post("/resetpassword/:token", resetPassword);
+
+//auth avec Google
+authRouter.get("/google", registerAndLoginWithGoogle);
+authRouter.get("/google/callback", googleCallback);
