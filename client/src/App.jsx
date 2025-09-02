@@ -1,8 +1,7 @@
-import "react-toastify/dist/ReactToastify.css";
 import Footer from "./component/footer/Footer";
 import Nav from "./component/nav/Nav";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import { ToastContainer } from "react-toastify";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom"
+import { Toaster } from "react-hot-toast";
 
 // Pages auth
 import Login from "./pages/auth/login/Login.jsx";
@@ -22,18 +21,9 @@ function App() {
           <Route path="/activatemail/:token" element={<Activate />} />
           <Route path="/landing" element={<Landing />} />
         </Routes>
+        <Toaster />
         <Footer />
       </Router>
-      <ToastContainer
-        position="top-right"
-        autoClose={3000}
-        hideProgressBar={false}
-        newestOnTop
-        closeOnClick
-        draggable
-        pauseOnHover
-        limit={3}
-      />
     </>
   );
 }

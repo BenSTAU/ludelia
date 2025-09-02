@@ -3,7 +3,6 @@ import "./register.scss";
 import CardGoogle from "../../../component/card/cardGoogle/CardGoogle";
 import fairy from "../../../assets/image/fairy.svg";
 import { Link, useNavigate } from "react-router-dom";
-import { toast } from "react-toastify";
 import { useState } from "react";
 
 export default function Register() {
@@ -28,27 +27,37 @@ export default function Register() {
       return;
     }
 
-    const response = await fetch(`${import.meta.env.VITE_API_URL}/v1/auth/register`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(formData),
-    });
-    console.log(JSON.stringify(formData));
-    const data = await response.json();
-    if (response.ok) {
-      console.log(data);
-      toast.success(data.message, {
-        position: "top-center",
-        autoClose: 2000,
-      });
-      navigate("/");
-    } else {
-      console.error(data);
-      toast.error(data.message, {
-        position: "top-center",
-        autoClose: 2000,
+    const toastId = toast.loading("Inscription en cours...");
+
+    try {
+      const response = await fetch(
+        `${import.meta.env.VITE_API_URL}/v1/auth/register`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(formData),
+        }
+      );
+
+      const data = await response.json();
+      if (response.ok) {
+        toast.success(data.message, {
+          id: toastId,
+          duration: 2000,
+        });
+        navigate("/");
+      } else {
+        toast.error(data.message, {
+          id: toastId,
+          duration: 2000,
+        });
+      }
+    } catch (error) {
+      toast.error("Erreur lors de l'inscription", {
+        id: toastId,
+        duration: 2000,
       });
     }
   }
@@ -65,7 +74,9 @@ export default function Register() {
               id="username"
               name="username"
               placeholder="Entrez votre nom d'utilisateur"
-              onChange = {(e) => setFormData({ ...formData, username: e.target.value })}
+              onChange={(e) =>
+                setFormData({ ...formData, username: e.target.value })
+              }
               required
             />
           </div>
@@ -76,7 +87,9 @@ export default function Register() {
               id="name"
               name="name"
               placeholder="Entrez votre nom"
-              onChange = {(e) => setFormData({ ...formData, name: e.target.value })}
+              onChange={(e) =>
+                setFormData({ ...formData, name: e.target.value })
+              }
               required
             />
           </div>
@@ -87,7 +100,9 @@ export default function Register() {
               id="surname"
               name="surname"
               placeholder="Entrez votre prénom"
-              onChange = {(e) => setFormData({ ...formData, surname: e.target.value })}
+              onChange={(e) =>
+                setFormData({ ...formData, surname: e.target.value })
+              }
               required
             />
           </div>
@@ -98,7 +113,9 @@ export default function Register() {
               id="email"
               name="email"
               placeholder="Entrez votre email"
-              onChange = {(e) => setFormData({ ...formData, email: e.target.value })}
+              onChange={(e) =>
+                setFormData({ ...formData, email: e.target.value })
+              }
               required
             />
           </div>
@@ -109,7 +126,9 @@ export default function Register() {
               id="password"
               name="password"
               placeholder="Entrez votre mot de passe"
-              onChange = {(e) => setFormData({ ...formData, password: e.target.value })}
+              onChange={(e) =>
+                setFormData({ ...formData, password: e.target.value })
+              }
               required
             />
           </div>
@@ -120,7 +139,9 @@ export default function Register() {
               id="confirmPassword"
               name="confirmPassword"
               placeholder="Confirmez votre mot de passe"
-              onChange = {(e) => setFormData({ ...formData, confirmPassword: e.target.value })}
+              onChange={(e) =>
+                setFormData({ ...formData, confirmPassword: e.target.value })
+              }
               required
             />
           </div>
@@ -131,13 +152,17 @@ export default function Register() {
               id="telephone"
               name="telephone"
               placeholder="Entrez votre numéro de téléphone"
-              onChange = {(e) => setFormData({ ...formData, telephone: e.target.value })}
+              onChange={(e) =>
+                setFormData({ ...formData, telephone: e.target.value })
+              }
               required
             />
           </div>
-          <button onClick={handleRegister} className="btn btnRegister">S'inscrire</button>
+          <button onClick={handleRegister} className="btn btnRegister">
+            S'inscrire
+          </button>
           <img src={fairy} alt="dessin d'une fée" className="fairyImage" />
-          <Link to="/">S'inscrire</Link>
+          <Link to="/">Se connecter</Link>
         </CardAuth>
         <h2> Ou </h2>
         <CardGoogle />
