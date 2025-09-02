@@ -12,6 +12,9 @@ export async function googleCallback(req, res, next) {
     session: false // On utilise JWT, pas les sessions
   }, (err, user) => {
     if (err) {
+      if (err.message === "provider = classique") {
+        return res.status(400).redirect(`${process.env.CLIENT_URL}/?google=classique`);
+      }
       console.error('Google callback error:', err);
       return res.status(400).redirect(`${process.env.CLIENT_URL}/?google=false`);
     }
