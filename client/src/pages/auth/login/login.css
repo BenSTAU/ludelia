@@ -11,6 +11,11 @@ section {
 section h1 {
   font-size: var(--font-size-xxl);
   color: var(--color-accent-1);
+  text-align: center;
+}
+section > p {
+  color: var(--color-text-secondary);
+  font-family: var(--font-secondary);
 }
 section > div {
   display: flex;
