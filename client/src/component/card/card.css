@@ -46,6 +46,11 @@
   color: var(--placeholder-text-color);
   opacity: 1;
 }
+@media (min-width: 768px) {
+  .card {
+    width: 50%;
+  }
+}
 
 .cardAuth form {
   position: relative;

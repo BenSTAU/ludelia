@@ -13,10 +13,6 @@ section h1 {
   color: var(--color-accent-1);
   text-align: center;
 }
-section > p {
-  color: var(--color-text-secondary);
-  font-family: var(--font-secondary);
-}
 section > div {
   display: flex;
   justify-content: space-between;

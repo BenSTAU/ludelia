@@ -1,8 +1,11 @@
 @use "../auth.scss";
 
+.btnDragonContainer {
+  display: flex;
+  align-items: center;
+  gap: 1rem; // espace entre le bouton et le dragon
+}
 .dragonImage {
   position: absolute;
-  bottom: -20%;
-  left: 70%;
-  transform: translateX(-50%);
+  bottom: -50px;
 }
