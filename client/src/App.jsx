@@ -7,7 +7,7 @@ import { Toaster } from "react-hot-toast";
 import Login from "./pages/auth/login/Login.jsx";
 import Register from "./pages/auth/register/Register.jsx";
 import Activate from "./pages/auth/activation/Activate.jsx";
-import ForgottenPassword from "./pages/auth/password/forgottenPassword.jsx";
+import ForgottenPassword from "./pages/auth/password/ForgottenPassword.jsx";
 
 import Landing from "./pages/landing/Landing.jsx";
 import ResetPassword from "./pages/auth/password/ResetPassword.jsx";

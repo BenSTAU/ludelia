@@ -323,4 +323,3 @@ export async function resetPassword(req, res) {
   }
 }
 
-export async function registerAndLoginWithGoogle(req, res) {}
