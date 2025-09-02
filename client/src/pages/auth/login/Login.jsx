@@ -21,11 +21,14 @@ export default function Login() {
       toast.error("Erreur de connexion avec Google", {
         duration: 2000,
       });
-      navigate('/');
+      navigate("/");
     } else if (params.get("google") === "classique") {
-      toast.error("Compte déjà existant, veuillez vous connecter avec vos identifiants", {
-        duration: 2000,
-      });
+      toast.error(
+        "Compte déjà existant, veuillez vous connecter avec vos identifiants",
+        {
+          duration: 2000,
+        }
+      );
     }
   }, [location, navigate]);
 
@@ -100,12 +103,19 @@ export default function Login() {
               required
             />
           </div>
-          <button onClick={handleLogin} className="btn btnLogin">
-            Connexion
-          </button>
-          <img src={dragon} alt="dessin d'un dragon" className="dragonImage" />
           <Link to="/forgotpassword">Mot de passe oublié ?</Link>
           <Link to="/register">S'inscrire</Link>
+          <div className="btnDragonContainer">
+            <button onClick={handleLogin} className="btn btnLogin">
+              Connexion
+            </button>
+
+            <img
+              src={dragon}
+              alt="dessin d'un dragon"
+              className="dragonImage"
+            />
+          </div>
         </CardAuth>
         <h2> Ou </h2>
         <CardGoogle />

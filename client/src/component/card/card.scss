@@ -42,7 +42,10 @@
     color: var(--placeholder-text-color);
     opacity: 1; // Pour forcer la couleur sur certains navigateurs
   }
-}
+  @media (min-width: 768px) {
+  width: 50%;
+    
+}}
 
 .cardAuth {
 
