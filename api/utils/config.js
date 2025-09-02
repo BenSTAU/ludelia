@@ -35,8 +35,8 @@ passport.use(
 
         //chercher l'utilisateur
         const queryUser =
-          "SELECT * FROM utilisateur u JOIN provider p ON u.id_utilisateur = p.id_utilisateur WHERE p.provider_id = $1";
-        const existingUser = await client.query(queryUser, [profile.id]);
+          "SELECT * FROM utilisateur u JOIN provider p ON u.id_utilisateur = p.id_utilisateur WHERE p.provider_id = $1 or u.email = $2";
+        const existingUser = await client.query(queryUser, [profile.id, profile.emails[0].value]);
 
         if (existingUser.rows.length > 0 && existingUser.rows[0].provider_name === "google") {
           // L'utilisateur existe déjà
