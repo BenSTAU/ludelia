@@ -1,109 +1,104 @@
 @font-face {
-    font-family: 'Cinzel';
-    src: url(../assets/font/cinzelFont.ttf) format('truetype');
-    font-weight: 400; // Regular
-
+  font-family: "Cinzel";
+  src: url(../assets/font/cinzelFont.ttf) format("truetype");
+  font-weight: 400; // Regular
 }
 @font-face {
-    font-family: "Roboto";
-    src: url(../assets/font/robotoFont.ttf) format('truetype');
+  font-family: "Roboto";
+  src: url(../assets/font/robotoFont.ttf) format("truetype");
 }
 :root {
-    // couleurs
-    --color-primary : #F5DEB3;
-    --color-secondary-dark : #5D4037;
-    --color-secondary-light : #F8F5F0;
+  // couleurs
+  --color-primary: #f5deb3;
+  --color-secondary-dark: #5d4037;
+  --color-secondary-light: #f8f5f0;
 
-    --color-text-primary : #2C1810;
-    --color-text-secondary : #5D4037;
-    --color-text-light : #F8F5F0;
+  --color-text-primary: #2c1810;
+  --color-text-secondary: #5d4037;
+  --color-text-light: #f8f5f0;
 
-    --color-accent-primary : #8B4513;
-    --color-accent-1 : #DAA520;
-    --color-accent-2 : #B8860B;
-    --color-accent-3 : #D2691E;
+  --color-accent-primary: #8b4513;
+  --color-accent-1: #daa520;
+  --color-accent-2: #b8860b;
+  --color-accent-3: #d2691e;
 
-    --color-border : #DAA520;
+  --color-border: #daa520;
 
-    --color-input : #EAE9E9;
+  --color-input: #eae9e9;
 
-    // font
-    --font-primary : 'Cinzel', serif;
-    --font-secondary : 'Roboto', sans-serif;
+  // font
+  --font-primary: "Cinzel", serif;
+  --font-secondary: "Roboto", sans-serif;
 
-    // tailles de police
-    --font-size-xxl : 40px;
-    --font-size-xl : 32px;
-    --font-size-lg : 24px;
-    --font-size-md : 20px;
-    --font-size-sm : 16px;
-    --font-size-xs : 14px;
+  // tailles de police
+  --font-size-3xl: 48px;
+  --font-size-xxl: 40px;
+  --font-size-xl: 32px;
+  --font-size-lg: 24px;
+  --font-size-md: 20px;
+  --font-size-sm: 16px;
+  --font-size-xs: 14px;
 
-    //cartes de jeu
-    --border-radius : 37px;
-    --border-radius-sm : 12px;
+  //cartes de jeu
+  --border-radius: 37px;
+  --border-radius-sm: 12px;
 
-    //form
-    --label-text-size : 18px;
-    --label-text-font : 'Cinzel', serif;
-    --placeholder-text-size: 14px; 
-    --placeholder-text-color : #AAA8A8;
-
-
+  //form
+  --label-text-size: 18px;
+  --label-text-font: "Cinzel", serif;
+  --placeholder-text-size: 14px;
+  --placeholder-text-color: #aaa8a8;
 }
 
 // Reset de base
 * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
 a {
-    text-decoration: none;
-    color: inherit;
+  text-decoration: none;
+  color: inherit;
 }
 
 ul,
 ol {
-    list-style: none;
+  list-style: none;
 }
 
 img {
-    max-width: 100%;
-    display: block;
+  max-width: 100%;
+  display: block;
 }
 body {
-    background-color: var(--color-primary);
-    color: var(--color-text-primary);
-
+  background-color: var(--color-primary);
+  color: var(--color-text-primary);
 }
 button {
-    cursor: pointer;
-    border: none;
-    background: none;
+  cursor: pointer;
+  border: none;
+  background: none;
 }
 
 h2 {
-    font-family: var(--font-primary);
-    font-size: var(--font-size-md);
-    color: var(--color-text-primary);
-    letter-spacing: 0.1rem;
-
+  font-family: var(--font-primary);
+  font-size: var(--font-size-md);
+  color: var(--color-text-primary);
+  letter-spacing: 0.1rem;
 }
 h3 {
-    font-family: var(--font-secondary);
-    font-size: var(--font-size-sm);
-    color: var(--color-text-secondary);
+  font-family: var(--font-secondary);
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
 }
 form {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-around;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
 
-    input {
-        border: none;
-        background-color: var(--color-input);
-    }
-
+  input {
+    border: none;
+    background-color: var(--color-input);
+  }
 }

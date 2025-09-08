@@ -1,7 +1,7 @@
 import "./nav.scss";
 import logo from "../../assets/image/logo.svg";
 import { CiMenuBurger } from "react-icons/ci";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import login from "../../assets/image/login.svg";
 import logoutButton from "../../assets/image/logout.svg";
 import { useState } from "react";
@@ -51,8 +51,21 @@ export default function Nav() {
           />
         </button>
         <ul className={menuBurgerOpen ? "mobileNav" : "desktopNav"}>
-          <li>Home</li>
-          <li>About</li>
+          <li>
+            <Link to="/">Accueil</Link>
+          </li>
+          <li>
+            <Link>Explorer les tables</Link>
+          </li>
+          <li>
+            <Link>Mes parties</Link>
+          </li>
+          <li>
+            <Link>Mon panel MJ</Link>
+          </li>
+          <li>
+            <Link>Mon panel Admin</Link>
+          </li>
           <li>
             <img
               src={isAuthenticated ? logoutButton : login}
