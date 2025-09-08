@@ -11,7 +11,7 @@ import ForgottenPassword from "./pages/auth/password/ForgottenPassword.jsx";
 
 import Landing from "./pages/landing/Landing.jsx";
 import ResetPassword from "./pages/auth/password/ResetPassword.jsx";
-import CheckAuth from "../utils/checkAuth.jsx";
+import CheckAuth from "../utils/CheckAuth.jsx";
 
 function App() {
   return (
