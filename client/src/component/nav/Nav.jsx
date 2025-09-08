@@ -3,7 +3,7 @@ import logo from "../../assets/image/logo.svg";
 import { CiMenuBurger } from "react-icons/ci";
 import { useNavigate } from "react-router-dom";
 import login from "../../assets/image/login.svg";
-import logout from "../../assets/image/logout.svg";
+import logoutButton from "../../assets/image/logout.svg";
 import { useState } from "react";
 import toast from "react-hot-toast";
 import { useAuth } from "../../../utils/useAuth";
@@ -11,7 +11,7 @@ import { useAuth } from "../../../utils/useAuth";
 export default function Nav() {
   const navigate = useNavigate();
   const [menuBurgerOpen, setMenuBurgerOpen] = useState(false);
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, logout } = useAuth();
 
   async function handleLogout() {
     const toastId = toast.loading("Deconnexion en cours...");
@@ -30,6 +30,7 @@ export default function Nav() {
         duration: 2000,
       });
       navigate("/");
+      logout();
     } else {
       toast.error(data.message, {
         id: toastId,
@@ -54,7 +55,7 @@ export default function Nav() {
           <li>About</li>
           <li>
             <img
-              src={isAuthenticated ? logout : login}
+              src={isAuthenticated ? logoutButton : login}
               alt="bouton de deconnexion"
               onClick={
                 isAuthenticated ? handleLogout : () => navigate("/login")

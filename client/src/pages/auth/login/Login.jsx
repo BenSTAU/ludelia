@@ -16,10 +16,9 @@ export default function Login() {
     emailUsername: "",
     password: "",
   });
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, setIsAuthenticated } = useAuth();
 
   useEffect(() => {
-    console.log(isAuthenticated);
     if (isAuthenticated) {
       navigate("/");
     }
@@ -65,6 +64,7 @@ export default function Login() {
           id: toastId,
           duration: 2000,
         });
+        setIsAuthenticated(true);
         navigate("/");
       } else {
         toast.error(data.message, {

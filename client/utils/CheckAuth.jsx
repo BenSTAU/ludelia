@@ -7,6 +7,11 @@ export default function CheckAuth({ children }) {
   const [user, setUser] = useState([]);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
+  const logout = async () => {
+    setIsAuthenticated(false);
+    setUser(null);
+  };
+
   async function checkAuth() {
     try {
       const response = await fetch(
@@ -25,15 +30,7 @@ export default function CheckAuth({ children }) {
         setUser(data.user);
         setIsAuthenticated(true);
       }
-      const logout = async () => {
-        setIsAuthenticated(false);
-        setUser(null);
-      };
     } catch (error) {
-      console.error(
-        "Erreur lors de la vérification de l'authentification",
-        error
-      );
       setIsAuthenticated(false);
       setUser(null);
     }
@@ -42,7 +39,9 @@ export default function CheckAuth({ children }) {
     checkAuth();
   }, []);
   return (
-    <AuthContext.Provider value={{ user, isAuthenticated, setUser }}>
+    <AuthContext.Provider
+      value={{ user, isAuthenticated, setIsAuthenticated, setUser, logout }}
+    >
       {children}
     </AuthContext.Provider>
   );
