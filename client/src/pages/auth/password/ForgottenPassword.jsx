@@ -5,7 +5,6 @@ import { useState } from "react";
 import toast from "react-hot-toast";
 import "./password.scss";
 
-
 export default function ForgottenPassword() {
   const navigate = useNavigate();
   const [emailUsername, setEmailUsername] = useState("");
@@ -51,7 +50,10 @@ export default function ForgottenPassword() {
     <section>
       <div>
         <h1>Réinitialisation du mot de passe</h1>
-        <p>veuillez renseigner votre nom d’utilisateur et votre email pour recevoir un lien de réinitialisation de votre mot de passe</p>
+        <p>
+          veuillez renseigner votre nom d’utilisateur et votre email pour
+          recevoir un lien de réinitialisation de votre mot de passe
+        </p>
         <CardAuth height={"200px"}>
           <div>
             <label htmlFor="emailUsername">Email / Nom d'utilisateur</label>
@@ -60,16 +62,17 @@ export default function ForgottenPassword() {
               id="emailUsername"
               name="emailUsername"
               placeholder="Entrez votre email ou nom d'utilisateur"
-              onChange={(e) =>
-                setEmailUsername(e.target.value)
-              }
+              onChange={(e) => setEmailUsername(e.target.value)}
               required
             />
           </div>
-          <button onClick={handleForgottenPassword} className="btn btnForgottenPassword">
+          <button
+            onClick={handleForgottenPassword}
+            className="btn btnForgottenPassword"
+          >
             Envoyer
           </button>
-          <Link to="/">Se connecter</Link>
+          <Link to="/login">Se connecter</Link>
           <Link to="/register">S'inscrire</Link>
         </CardAuth>
         <h2> Ou </h2>

@@ -4,6 +4,7 @@ import CardGoogle from "../../../component/card/cardGoogle/CardGoogle";
 import fairy from "../../../assets/image/fairy.svg";
 import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
+import Password from "../../../component/auth/password";
 
 export default function Register() {
   const navigate = useNavigate();
@@ -121,28 +122,23 @@ export default function Register() {
           </div>
           <div>
             <label htmlFor="password">Mot de passe</label>
-            <input
-              type="password"
+            <Password
               id="password"
-              name="password"
+              nom="password"
               placeholder="Entrez votre mot de passe"
-              onChange={(e) =>
-                setFormData({ ...formData, password: e.target.value })
-              }
-              required
+              formData={formData}
+              setFormData={setFormData}
             />
           </div>
+
           <div>
             <label htmlFor="confirmPassword">Confirmer le mot de passe</label>
-            <input
-              type="password"
+            <Password
               id="confirmPassword"
               name="confirmPassword"
               placeholder="Confirmez votre mot de passe"
-              onChange={(e) =>
-                setFormData({ ...formData, confirmPassword: e.target.value })
-              }
-              required
+              formData={formData}
+              setFormData={setFormData}
             />
           </div>
           <div>
@@ -162,7 +158,7 @@ export default function Register() {
             S'inscrire
           </button>
           <img src={fairy} alt="dessin d'une fée" className="fairyImage" />
-          <Link to="/">Se connecter</Link>
+          <Link to="/login">Se connecter</Link>
         </CardAuth>
         <h2> Ou </h2>
         <CardGoogle />

@@ -28,3 +28,18 @@ section {
     }
   }
 }
+
+.eyeIcon {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+  color: var(--color-accent-1);
+}
+.passwordInputContainer {
+  position: relative;
+  width: 100%;
+}

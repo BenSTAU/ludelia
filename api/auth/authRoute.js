@@ -13,6 +13,8 @@ import {
   registerAndLoginWithGoogle,
   googleCallback,
 } from "./authGoogleController.js";
+import pool from "../utils/config.js";
+import verifyToken from "../utils/verifyToken.js";
 
 export const authRouter = express.Router();
 
@@ -38,3 +40,16 @@ authRouter.post("/resetpassword/:token", resetPassword);
 //auth avec Google
 authRouter.get("/google", registerAndLoginWithGoogle);
 authRouter.get("/google/callback", googleCallback);
+
+// endpoint pour vérifier le token
+authRouter.get("/verifytoken", verifyToken, async (req, res) => {
+  const query =
+    "SELECT id_utilisateur, username, email FROM utilisateur WHERE id_utilisateur = $1";
+  const result = await pool.query(query, [req.id]);
+
+  if (result.rows.length === 0) {
+    return res.status(404).json({ message: "Utilisateur introuvable" });
+  }
+
+  res.json({ user: result.rows[0] });
+});

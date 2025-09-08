@@ -2,6 +2,7 @@ import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
 import pool from "./utils/config.js";
+import cookieParser from "cookie-parser";
 
 //Routers
 import { authRouter } from "./auth/authRoute.js";
@@ -18,6 +19,7 @@ app.use(
 );
 app.use(express.json());
 app.use(passport.initialize());
+app.use(cookieParser());
 
 //routes
 app.use("/api/v1/auth", authRouter);
