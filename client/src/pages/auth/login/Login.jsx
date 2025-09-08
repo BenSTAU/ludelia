@@ -20,6 +20,9 @@ export default function Login() {
 
   useEffect(() => {
     if (isAuthenticated) {
+      toast.error("Vous êtes déjà connecté", {
+        duration: 2000,
+      });
       navigate("/");
     }
   }, [isAuthenticated, navigate]);

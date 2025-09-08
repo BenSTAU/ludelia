@@ -4,20 +4,34 @@ nav {
   left: 0;
   display: flex;
   justify-content: space-around;
-  align-items: center;
   background-color: var(--color-accent-primary);
   color: var(--color-text-light);
   width: 100%;
   height: 10dvh;
   font-family: var(--font-primary);
-  font-size: var(--font-size-lg);
   z-index: 100;
 }
 nav button {
   display: block;
 }
+nav .mobileNav {
+  display: flex;
+  gap: 1rem;
+  flex-direction: column;
+  align-items: center;
+  position: absolute;
+  top: 90%;
+  right: 0%;
+  padding: 1rem 3rem;
+  font-size: var(--font-size-md);
+  background-color: var(--color-accent-primary);
+  z-index: 100;
+  border-radius: var(--border-radius-sm);
+}
 nav .desktopNav {
   display: none;
+  align-items: center;
+  font-size: var(--font-size-xs);
 }
 @media (min-width: 768px) {
   nav button {
