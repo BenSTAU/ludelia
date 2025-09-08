@@ -4,7 +4,7 @@ import CardGoogle from "../../../component/card/cardGoogle/CardGoogle";
 import fairy from "../../../assets/image/fairy.svg";
 import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
-import Password from "../../../component/auth/password";
+import Password from "../../../component/auth/Password";
 
 export default function Register() {
   const navigate = useNavigate();

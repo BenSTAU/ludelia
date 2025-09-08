@@ -6,7 +6,7 @@ import { Link, useNavigate, useLocation } from "react-router-dom";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { handleResendActivationEmail } from "../../../../utils/resendActivationMail";
-import Password from "../../../component/auth/password";
+import Password from "../../../component/auth/Password";
 import { useAuth } from "../../../../utils/useAuth";
 
 export default function Login() {
