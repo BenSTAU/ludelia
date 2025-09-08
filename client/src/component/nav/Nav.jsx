@@ -1,5 +1,6 @@
 import "./nav.scss";
 import logo from "../../assets/image/logo.svg";
+import logoDarkTheme from "../../assets/image/logoDarkTheme.svg";
 import { CiMenuBurger } from "react-icons/ci";
 import { useNavigate, Link } from "react-router-dom";
 import login from "../../assets/image/login.svg";
@@ -7,12 +8,29 @@ import logoutButton from "../../assets/image/logout.svg";
 import { useState } from "react";
 import toast from "react-hot-toast";
 import { useAuth } from "../../../utils/useAuth";
+import { MdDarkMode } from "react-icons/md";
+import { MdOutlineDarkMode } from "react-icons/md";
 
 export default function Nav() {
   const navigate = useNavigate();
   const [menuBurgerOpen, setMenuBurgerOpen] = useState(false);
   const { isAuthenticated, logout } = useAuth();
+  const [isDarkMode, setIsDarkMode] = useState(
+    localStorage.getItem("darkMode") === "true"
+  );
 
+  const handleDarkModeToggle = () => {
+    const root = document.documentElement;
+    if (isDarkMode) {
+      root.classList.remove("dark");
+      localStorage.setItem("darkMode", "false");
+      setIsDarkMode(false);
+    } else {
+      root.classList.add("dark");
+      localStorage.setItem("darkMode", "true");
+      setIsDarkMode(true);
+    }
+  };
   async function handleLogout() {
     const toastId = toast.loading("Deconnexion en cours...");
 
@@ -42,11 +60,16 @@ export default function Nav() {
   return (
     <header>
       <nav>
-        <img src={logo} alt="logo" width="100" onClick={() => navigate("/")} />
+        <img
+          src={isDarkMode ? logoDarkTheme : logo}
+          alt="logo"
+          width="100"
+          onClick={() => navigate("/")}
+        />
         <button>
           <CiMenuBurger
             size={30}
-            color="var(--color-secondary-light"
+            color=" var(--color-burger)"
             onClick={() => setMenuBurgerOpen(!menuBurgerOpen)}
           />
         </button>
@@ -65,6 +88,21 @@ export default function Nav() {
           </li>
           <li>
             <Link>Mon panel Admin</Link>
+          </li>
+          <li>
+            {isDarkMode ? (
+              <MdDarkMode
+                size={30}
+                color="var(--color-burger)"
+                onClick={handleDarkModeToggle}
+              />
+            ) : (
+              <MdOutlineDarkMode
+                size={30}
+                color="var(--color-burger)"
+                onClick={handleDarkModeToggle}
+              />
+            )}
           </li>
           <li>
             <img

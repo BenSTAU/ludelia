@@ -12,6 +12,7 @@ import ForgottenPassword from "./pages/auth/password/ForgottenPassword.jsx";
 import Landing from "./pages/landing/Landing.jsx";
 import ResetPassword from "./pages/auth/password/ResetPassword.jsx";
 import CheckAuth from "../utils/CheckAuth.jsx";
+import Mentions from "./pages/auth/mentions/Mentions.jsx";
 
 function App() {
   return (
@@ -26,6 +27,7 @@ function App() {
             <Route path="/" element={<Landing />} />
             <Route path="/forgotpassword" element={<ForgottenPassword />} />
             <Route path="/resetpassword/:token" element={<ResetPassword />} />
+            <Route path="/mentions" element={<Mentions />} />
           </Routes>
           <Toaster />
           <Footer />

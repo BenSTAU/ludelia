@@ -8,7 +8,7 @@
   src: url(../assets/font/robotoFont.ttf) format("truetype");
 }
 :root {
-  // couleurs
+  //   couleurs
   --color-primary: #f5deb3;
   --color-secondary-dark: #5d4037;
   --color-secondary-light: #f8f5f0;
@@ -25,6 +25,8 @@
   --color-border: #daa520;
 
   --color-input: #eae9e9;
+
+  --color-burger: #f8f5f0;
 
   // font
   --font-primary: "Cinzel", serif;
@@ -50,6 +52,21 @@
   --placeholder-text-color: #aaa8a8;
 }
 
+:root.dark {
+  --color-primary: #2a1810; /* Arrière-plan principal */
+  --color-secondary-dark: #3d2a1c; /* Arrière-plan header/footer */
+  --color-secondary-light: #4a3326; /* Arrière-plan des cartes */
+  --color-text-primary: #f5deb3; /* Texte principal */
+  --color-text-secondary: #e6d4a3; /* Texte secondaire */
+  --color-text-light: #c4b390; /* Texte discret */
+  --color-accent-primary: #3d2a1c; /* Accent or principal */
+  --color-accent-1: #b8860b; /* Accent or foncé */
+  --color-accent-2: #b8860b; /* Accent or foncé */
+  --color-accent-3: #b8860b; /* Accent or foncé */
+  --color-border: #5d4037; /* Bordures */
+  --color-input: #4a3326;
+  --color-burger: #c4b390;
+}
 // Reset de base
 * {
   margin: 0;
