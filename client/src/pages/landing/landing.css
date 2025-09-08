@@ -18,6 +18,7 @@
 }
 .landing .textLanding h1 {
   text-align: left;
+  color: var(--color-accent-2);
 }
 @media (min-width: 768px) {
   .landing .textLanding h1 {
