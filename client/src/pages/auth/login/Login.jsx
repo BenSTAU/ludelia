@@ -6,6 +6,8 @@ import { Link, useNavigate, useLocation } from "react-router-dom";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { handleResendActivationEmail } from "../../../../utils/resendActivationMail";
+import Password from "../../../component/auth/password";
+import { useAuth } from "../../../../utils/useAuth";
 
 export default function Login() {
   const navigate = useNavigate();
@@ -14,6 +16,14 @@ export default function Login() {
     emailUsername: "",
     password: "",
   });
+  const { isAuthenticated } = useAuth();
+
+  useEffect(() => {
+    console.log(isAuthenticated);
+    if (isAuthenticated) {
+      navigate("/");
+    }
+  }, [isAuthenticated, navigate]);
 
   useEffect(() => {
     const params = new URLSearchParams(location.search);
@@ -46,6 +56,7 @@ export default function Login() {
             "Content-Type": "application/json",
           },
           body: JSON.stringify(formData),
+          credentials: "include",
         }
       );
       const data = await response.json();
@@ -54,7 +65,7 @@ export default function Login() {
           id: toastId,
           duration: 2000,
         });
-        navigate("/landing");
+        navigate("/");
       } else {
         toast.error(data.message, {
           id: toastId,
@@ -92,15 +103,12 @@ export default function Login() {
           </div>
           <div>
             <label htmlFor="password">Mot de passe</label>
-            <input
-              type="password"
+            <Password
               id="password"
-              name="password"
+              nom="password"
               placeholder="Entrez votre mot de passe"
-              onChange={(e) =>
-                setFormData({ ...formData, password: e.target.value })
-              }
-              required
+              formData={formData}
+              setFormData={setFormData}
             />
           </div>
           <Link to="/forgotpassword">Mot de passe oublié ?</Link>

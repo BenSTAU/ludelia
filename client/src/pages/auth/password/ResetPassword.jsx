@@ -5,7 +5,6 @@ import { useState } from "react";
 import toast from "react-hot-toast";
 import "./password.scss";
 
-
 export default function ResetPassword() {
   const navigate = useNavigate();
   const [password, setPassword] = useState("");
@@ -83,10 +82,13 @@ export default function ResetPassword() {
                 required
               />
             </div>
-            <button onClick={handleResetPassword} className="btn btnForgottenPassword">
+            <button
+              onClick={handleResetPassword}
+              className="btn btnForgottenPassword"
+            >
               Envoyer
             </button>
-            <Link to="/">Se connecter</Link>
+            <Link to="/login">Se connecter</Link>
             <Link to="/register">S'inscrire</Link>
           </CardAuth>
           <h2> Ou </h2>

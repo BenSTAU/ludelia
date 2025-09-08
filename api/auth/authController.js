@@ -220,7 +220,10 @@ export async function resendActivationEmail(req, res) {
 
 export async function logout(req, res) {
   try {
-    res.clearCookie("token");
+    res.clearCookie("token", {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+    });
     res.status(200).json({ message: "Déconnexion réussie" });
   } catch (error) {
     res.status(500).json({ message: "Erreur interne du serveur" });
@@ -322,4 +325,3 @@ export async function resetPassword(req, res) {
     client.release();
   }
 }
-
