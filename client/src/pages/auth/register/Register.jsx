@@ -1,6 +1,6 @@
-import CardAuth from "../../../component/card/cardAuth/CardAuth";
+import CardAuth from "../../../component/card/CardAuth";
 import "./register.scss";
-import CardGoogle from "../../../component/card/cardGoogle/CardGoogle";
+import CardGoogle from "../../../component/card/CardGoogle";
 import fairy from "../../../assets/image/fairy.svg";
 import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";

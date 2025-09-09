@@ -1,5 +1,5 @@
 import { useNavigate, useParams } from "react-router-dom";
-import CardAuth from "../../../component/card/cardAuth/CardAuth";
+import CardAuth from "../../../component/card/CardAuth";
 import { useEffect } from "react";
 import { useState } from "react";
 import toast from "react-hot-toast";
@@ -48,7 +48,7 @@ export default function Activate() {
       });
     }
   }
-  
+
   useEffect(() => {
     activateAccount();
   }, []);
@@ -59,8 +59,17 @@ export default function Activate() {
         {!success && (
           <>
             <p>Entrez votre email pour renvoyer l'email d'activation</p>
-            <input type="email" placeholder="Votre email" onChange={(e) => setEmail(e.target.value)} />
-            <button className="btn btnLogin" onClick={(e) => handleResendActivationEmail(e, email, navigate)}>Envoyer</button>
+            <input
+              type="email"
+              placeholder="Votre email"
+              onChange={(e) => setEmail(e.target.value)}
+            />
+            <button
+              className="btn btnLogin"
+              onClick={(e) => handleResendActivationEmail(e, email, navigate)}
+            >
+              Envoyer
+            </button>
           </>
         )}
         {success && (
