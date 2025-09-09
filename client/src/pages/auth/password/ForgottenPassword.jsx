@@ -1,5 +1,5 @@
-import CardAuth from "../../../component/card/cardAuth/CardAuth";
-import CardGoogle from "../../../component/card/cardGoogle/CardGoogle";
+import CardAuth from "../../../component/card/CardAuth";
+import CardGoogle from "../../../component/card/CardGoogle";
 import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import toast from "react-hot-toast";

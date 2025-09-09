@@ -1,6 +1,6 @@
-import CardAuth from "../../../component/card/cardAuth/CardAuth";
+import CardAuth from "../../../component/card/CardAuth";
 import "./login.scss";
-import CardGoogle from "../../../component/card/cardGoogle/CardGoogle";
+import CardGoogle from "../../../component/card/CardGoogle";
 import dragon from "../../../assets/image/flyingdragon.svg";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { useEffect, useState } from "react";

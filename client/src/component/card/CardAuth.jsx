@@ -1,4 +1,4 @@
-import "../card.scss";
+import "./card.scss";
 
 export default function CardAuth({ height, children }) {
   return (
