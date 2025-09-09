@@ -10,6 +10,8 @@ import toast from "react-hot-toast";
 import { useAuth } from "../../../utils/useAuth";
 import { MdDarkMode } from "react-icons/md";
 import { MdOutlineDarkMode } from "react-icons/md";
+import user from "../../assets/image/user.svg";
+import userDarkMode from "../../assets/image/userDarkMode.svg";
 
 export default function Nav() {
   const navigate = useNavigate();
@@ -31,6 +33,7 @@ export default function Nav() {
       setIsDarkMode(true);
     }
   };
+
   async function handleLogout() {
     const toastId = toast.loading("Deconnexion en cours...");
 
@@ -41,6 +44,7 @@ export default function Nav() {
         credentials: "include",
       }
     );
+
     const data = await response.json();
     if (response.ok) {
       toast.success(data.message, {
@@ -89,21 +93,34 @@ export default function Nav() {
           <li>
             <Link>Mon panel Admin</Link>
           </li>
-          <li>
-            {isDarkMode ? (
-              <MdDarkMode
-                size={30}
-                color="var(--color-burger)"
-                onClick={handleDarkModeToggle}
-              />
-            ) : (
-              <MdOutlineDarkMode
-                size={30}
-                color="var(--color-burger)"
-                onClick={handleDarkModeToggle}
-              />
+          <div className="navDarkAndUser">
+            {isDarkMode && isAuthenticated && (
+              <li>
+                <img src={userDarkMode} alt="symbole de l'utilisateur" />
+              </li>
             )}
-          </li>
+            {!isDarkMode && isAuthenticated && (
+              <li>
+                <img src={user} alt="symbole de l'utilisateur" />
+              </li>
+            )}
+            <li>
+              {isDarkMode ? (
+                <MdDarkMode
+                  size={30}
+                  color="var(--color-burger)"
+                  onClick={handleDarkModeToggle}
+                />
+              ) : (
+                <MdOutlineDarkMode
+                  size={30}
+                  color="var(--color-burger)"
+                  onClick={handleDarkModeToggle}
+                />
+              )}
+            </li>
+          </div>
+
           <li>
             <img
               src={isAuthenticated ? logoutButton : login}
