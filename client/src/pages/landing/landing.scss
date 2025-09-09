@@ -1,8 +1,7 @@
 .landing {
   display: flex;
-  justify-content: center;
-  gap: 6rem;
-  padding: 0 2rem;
+  height: auto;
+  padding: 15dvh 2rem;
   @media (min-width: 768px) {
     align-items: flex-start;
     width: 50%;
@@ -25,6 +24,7 @@
       padding: 0;
     }
   }
+
   .cards {
     position: relative;
     display: flex;
@@ -43,7 +43,7 @@
     .adventure {
       position: absolute;
       right: -5%;
-      bottom: 20%;
+      top: 45%;
     }
   }
 }

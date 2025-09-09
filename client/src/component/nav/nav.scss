@@ -34,6 +34,12 @@ nav {
     align-items: center;
     font-size: var(--font-size-xs);
   }
+  .navDarkAndUser {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+    justify-content: center;
+  }
 
   @media (min-width: 768px) {
     button {
