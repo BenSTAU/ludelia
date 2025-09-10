@@ -109,7 +109,7 @@ export async function loginWithUsernameAndPassword(req, res) {
 
     //Vérifier si le mail ou le nom d'utilisateur existe
     const query =
-      "SELECT * FROM utilisateur JOIN provider ON utilisateur.id_utilisateur = provider.id_utilisateur WHERE utilisateur.email = $1 or utilisateur.username = $1";
+      "SELECT *, role.designation AS role_designation FROM utilisateur JOIN provider ON utilisateur.id_utilisateur = provider.id_utilisateur JOIN role ON utilisateur.id_role = role.id_role WHERE utilisateur.email = $1 or utilisateur.username = $1";
     const user = await pool.query(query, [emailUsername]);
     if (user.rows.length === 0) {
       return res.status(404).json({ message: "Identifiants incorrects" });
@@ -129,7 +129,7 @@ export async function loginWithUsernameAndPassword(req, res) {
 
     //générer un token JWT
     const token = jwt.sign(
-      { id: user.rows[0].id_utilisateur },
+      { id: user.rows[0].id_utilisateur, role: user.rows[0].role_designation },
       process.env.JWT_SECRET,
       { expiresIn: "1h" }
     );
