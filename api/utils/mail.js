@@ -57,3 +57,44 @@ export const htmlResetPassword = (surname, link) => {
     </html>
   `;
 };
+
+export const htmlInscriptionConfirmation = (
+  surname,
+  tableName,
+  dateDebut,
+  dateFin
+) => {
+  return `
+    <!DOCTYPE html>
+    <html lang="fr">
+      <head>
+        <meta charset="UTF-8" />
+        <title>Confirmation d'inscription</title>
+      </head>
+      <body style="font-family: Arial, sans-serif; text-align: center; padding: 20px; background: #F5DEB3;">
+        <h1>Merci ${surname} pour votre inscription !</h1>
+        <p>Vous avez été inscrit avec succès à la table ${tableName}.</p>
+        <p>La date de début est : ${dateDebut}</p>
+        <p>La date de fin est : ${dateFin}</p>
+        <p>Nous vous attendons avec impatience.</p>
+      </body>
+    </html>
+  `;
+};
+
+export const htmlInvitationCancellation = (surname, tableName) => {
+  return `
+    <!DOCTYPE html>
+    <html lang="fr">
+      <head>
+        <meta charset="UTF-8" />
+        <title>Annulation d'inscription</title>
+      </head>
+      <body style="font-family: Arial, sans-serif; text-align: center; padding: 20px; background: #F5DEB3;">
+        <h1>Bonjour ${surname},</h1>
+        <p>Nous sommes désolés de vous informer que votre inscription à la table ${tableName} a été annulée.</p>
+        <p>Si vous avez des questions, n'hésitez pas à nous contacter.</p>
+      </body>
+    </html>
+  `;
+};

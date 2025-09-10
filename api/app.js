@@ -8,6 +8,7 @@ import passport from "passport";
 //Routers
 import { authRouter } from "./auth/authRoute.js";
 import { tablesRouter } from "./tables/tablesRoutes.js";
+import { inscriptionRouter } from "./inscriptions/inscriptionsRoutes.js";
 
 dotenv.config();
 const app = express();
@@ -25,6 +26,7 @@ app.use(cookieParser());
 //routes
 app.use("/api/v1/auth", authRouter);
 app.use("/api/v1/tables", tablesRouter);
+app.use("/api/v1/inscriptions", inscriptionRouter);
 
 //Connection de la base de données et lancement du serveur
 
