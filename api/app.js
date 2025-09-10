@@ -3,10 +3,11 @@ import cors from "cors";
 import dotenv from "dotenv";
 import pool from "./utils/config.js";
 import cookieParser from "cookie-parser";
+import passport from "passport";
 
 //Routers
 import { authRouter } from "./auth/authRoute.js";
-import passport from "passport";
+import { tablesRouter } from "./tables/tablesRoutes.js";
 
 dotenv.config();
 const app = express();
@@ -23,6 +24,9 @@ app.use(cookieParser());
 
 //routes
 app.use("/api/v1/auth", authRouter);
+app.use("/api/v1/tables", tablesRouter);
+
+//Connection de la base de données et lancement du serveur
 
 async function connect() {
   try {
