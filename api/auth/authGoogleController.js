@@ -34,7 +34,11 @@ export async function googleCallback(req, res, next) {
 
       // Générer un JWT
       const token = jwt.sign(
-        { id: user.id_utilisateur },
+        {
+          id: user.id_utilisateur,
+          role: user.rows[0].role_designation,
+          email: user.rows[0].email,
+        },
         process.env.JWT_SECRET,
         { expiresIn: "1h" }
       );

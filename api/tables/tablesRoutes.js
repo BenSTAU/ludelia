@@ -7,7 +7,7 @@ import {
   getAllTables,
   getOneTable,
   updateTable,
-} from "./tablesController.js";
+} from "./tablesControllers.js";
 import verifyToken from "../utils/verifyToken.js";
 import { verifyRoleMjOrAdmin } from "../utils/verifyRole.js";
 
