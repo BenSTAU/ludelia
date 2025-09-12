@@ -13,14 +13,13 @@ import { inscriptionRouter } from "./inscriptions/inscriptionsRoutes.js";
 dotenv.config();
 const app = express();
 
-// process.env.NODE_ENV === "production" &&
-//   app.use((req, res, next) => {
-//     if (req.header("x-forwarded-proto") !== "https") {
-//       return res.redirect(`https://${req.header("host")}${req.url}`);
-//     }
-//     console.log("Request was secure");
-//     next();
-//   });
+process.env.NODE_ENV === "production" &&
+  app.use((req, res, next) => {
+    if (req.header("x-forwarded-proto") !== "https") {
+      return res.redirect(`https://${req.header("host")}${req.url}`);
+    }
+    next();
+  });
 
 app.use(
   cors({
