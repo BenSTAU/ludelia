@@ -20,9 +20,6 @@ export default function Login() {
 
   useEffect(() => {
     if (isAuthenticated) {
-      toast.error("Vous êtes déjà connecté", {
-        duration: 2000,
-      });
       navigate("/");
     }
   }, [isAuthenticated, navigate]);
@@ -67,8 +64,8 @@ export default function Login() {
           id: toastId,
           duration: 2000,
         });
-        setIsAuthenticated(true);
         navigate("/");
+        setIsAuthenticated(true);
       } else {
         toast.error(data.message, {
           id: toastId,

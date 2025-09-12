@@ -141,6 +141,7 @@ export async function loginWithUsernameAndPassword(req, res) {
     res.cookie("token", token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
+      sameSite: process.env.SAMESITE,
     });
     res.status(200).json({ message: "Connexion réussie", token });
   } catch (error) {

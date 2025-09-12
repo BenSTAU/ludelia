@@ -50,6 +50,7 @@ export async function googleCallback(req, res, next) {
       res.cookie("token", token, {
         httpOnly: true,
         secure: process.env.NODE_ENV === "production",
+        sameSite: process.env.SAMESITE,
       });
 
       // Rediriger vers le frontend
