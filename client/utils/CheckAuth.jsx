@@ -23,17 +23,14 @@ export default function CheckAuth({ children }) {
       );
       const data = await response.json();
       if (!response.ok) {
-        console.log("Je viens de la route 1");
         setIsAuthenticated(false);
         setUser(null);
       }
       if (response.ok) {
-        console.log("Je viens de la route 2");
         setUser(data.user);
         setIsAuthenticated(true);
       }
     } catch (error) {
-      console.log("Je viens de la route 3");
       setIsAuthenticated(false);
       setUser(null);
     }
