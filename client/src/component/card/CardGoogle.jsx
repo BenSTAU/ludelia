@@ -1,9 +1,12 @@
+import { useAuth } from "../../../utils/useAuth";
 import googleLogo from "../../assets/image/google.svg";
 import "./card.scss";
 
 export default function CardGoogle() {
+  const { setIsAuthenticated } = useAuth();
   const handleGoogleLogin = () => {
     window.open(`${import.meta.env.VITE_API_URL}/v1/auth/google`, "_self");
+    setIsAuthenticated(true);
   };
 
   return (
