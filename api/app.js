@@ -18,7 +18,6 @@ process.env.NODE_ENV === "production" &&
     if (req.header("x-forwarded-proto") !== "https") {
       return res.redirect(`https://${req.header("host")}${req.url}`);
     }
-    console.log("Request was secure");
     next();
   });
 
