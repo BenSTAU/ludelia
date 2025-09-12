@@ -1,5 +1,6 @@
 import pool from "../utils/config.js";
 import { getOrCreateCategory } from "../utils/getOrCreateCategory.js";
+import { htmlInvitationCancellation } from "../utils/mail.js";
 
 //Récupérer 1 table avec id
 export async function getOneTable(req, res) {
@@ -23,6 +24,20 @@ export async function getOneTable(req, res) {
 export async function getAllTables(req, res) {
   try {
     const query = "select * from partie";
+    const tables = await pool.query(query);
+
+    res.status(200).json(tables.rows);
+  } catch (error) {
+    res
+      .status(500)
+      .json({ message: "Erreur durant la récupération", error: error });
+  }
+}
+
+//récupérer les tables avec un statut ouvert
+export async function getOpenTables(req, res) {
+  try {
+    const query = "SELECT * FROM partie WHERE statut = 'Ouvert'";
     const tables = await pool.query(query);
 
     res.status(200).json(tables.rows);
@@ -357,7 +372,7 @@ export async function updateTable(req, res) {
 
         const conflictCheck = await client.query(conflictQuery, [
           id_utilisateur,
-          endDate, // On utilise les dates existantes
+          endDate,
           startDate,
         ]);
 
@@ -438,6 +453,76 @@ export async function deleteTable(req, res) {
     res
       .status(500)
       .json({ message: "Erreur durant la suppression", error: error });
+  } finally {
+    client.release();
+  }
+}
+// gestion passage du statut en fermé
+export async function closeTable(req, res) {
+  const client = await pool.connect();
+  try {
+    const { id } = req.params;
+
+    // Vérifier que la table existe
+    const existingTableQuery = "SELECT * FROM partie WHERE id_partie = $1";
+    const existingTable = await client.query(existingTableQuery, [id]);
+
+    if (existingTable.rowCount === 0) {
+      return res.status(404).json({ message: "Table non trouvée" });
+    }
+
+    await client.query("BEGIN");
+
+    // Mettre à jour le statut de la table
+    const closeTableQuery =
+      "UPDATE partie SET id_statut = (SELECT id_statut FROM statut WHERE designation = 'fermé') WHERE id_partie = $1";
+    await client.query(closeTableQuery, [id]);
+
+    await client.query("COMMIT");
+
+    // Récupérer les inscriptions et invitations associées à la table
+    const inscriptionsFetchQuery =
+      "SELECT * FROM inscription WHERE id_partie = $1";
+    const invitationsFetchQuery =
+      "SELECT * FROM invitation WHERE id_partie = $1";
+    const inscriptions = await client.query(inscriptionsFetchQuery, [id]);
+    const invitations = await client.query(invitationsFetchQuery, [id]);
+
+    // Changer le statut en "Annulé" pour toutes les inscriptions et invitations
+    const updateInscriptionStatusQuery =
+      "UPDATE inscription SET id_statut = (SELECT id_statut FROM statut WHERE designation = 'annulé') WHERE id_partie = $1";
+    await client.query(updateInscriptionStatusQuery, [id]);
+    const updateInvitationStatusQuery =
+      "UPDATE invitation SET id_statut = (SELECT id_statut FROM statut WHERE designation = 'annulé') WHERE id_partie = $1";
+    await client.query(updateInvitationStatusQuery, [id]);
+    await client.query("COMMIT");
+
+    // Envoyer l'email pour chaque inscription
+    for (const inscription of inscriptions.rows) {
+      await sendEmail(
+        inscription.email,
+        "Annulation de votre inscription",
+        htmlInvitationCancellation(
+          inscription.surname,
+          existingTable.rows[0].nom
+        )
+      );
+    }
+    // Envoyer l'email pour chaque invitation
+    for (const invitation of invitations.rows) {
+      await sendEmail(
+        invitation.email,
+        "Annulation de votre invitation",
+        htmlInvitationCancellation(invitation.nom, existingTable.rows[0].nom)
+      );
+    }
+    return res.status(200).json({ message: "Table fermée avec succès" });
+  } catch (error) {
+    console.error("Error details:", error);
+    await client.query("ROLLBACK");
+    res
+      .status(500)
+      .json({ message: "Erreur durant la fermeture", error: error });
   } finally {
     client.release();
   }

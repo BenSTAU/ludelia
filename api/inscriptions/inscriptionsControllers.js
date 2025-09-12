@@ -57,7 +57,7 @@ export async function createInscription(req, res) {
     const { id_partie } = req.params;
     const id_utilisateur = req.id;
     const email = req.user.email;
-    const statutId = 1; // Valide
+    const statutId = 1;
 
     if (!email) {
       return res.status(400).json({ error: "Email utilisateur manquant" });
@@ -116,12 +116,13 @@ export async function createInscription(req, res) {
 
     for (const invitation of invitations) {
       const insertInvitationQuery =
-        "INSERT INTO invitation (id_inscription, email, nom, id_statut) VALUES ($1, $2, $3, $4)";
+        "INSERT INTO invitation (id_inscription, email, nom, id_statut, id_partie) VALUES ($1, $2, $3, $4, $5)";
       await client.query(insertInvitationQuery, [
         newInscription.rows[0].id_inscription,
         invitation.email,
         invitation.nom,
         statutId,
+        id_partie,
       ]);
 
       //Envoyer un email d'invitation à chaque invité
