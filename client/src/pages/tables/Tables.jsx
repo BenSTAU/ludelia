@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import "./tables.scss";
 import CardTable from "../../component/card/CardTable";
+import toast from "react-hot-toast";
 
 export default function Tables() {
   const [tables, setTables] = useState([]);
@@ -8,10 +9,14 @@ export default function Tables() {
   const [invitations, setInvitations] = useState([]);
 
   useEffect(() => {
+    toast.loading("Chargement des tables...", {
+      id: "loadingTables",
+    });
     const fetchTables = async () => {
       const response = await fetch(`${import.meta.env.VITE_API_URL}/v1/tables`);
       const data = await response.json();
       setTables(data);
+      toast.dismiss("loadingTables");
     };
 
     const fetchInscriptions = async () => {
@@ -35,15 +40,13 @@ export default function Tables() {
     minute: "2-digit",
   });
 }
-  console.log(tables);
-  console.log('inscriptions', inscriptions);
 
   return (
     <section>
       <h1>Tables</h1>
       {tables.map((table) => (
         <CardTable
-          backgroundHeader={"var(--color-accent-1)"}
+          backgroundHeader={"--color-accent-primary"}
           key={table.id_partie}
           height="510px"
           title={table.nom}

@@ -3,10 +3,24 @@ import googleLogo from "../../assets/image/google.svg";
 import "./card.scss";
 
 export default function CardGoogle() {
-  const { setIsAuthenticated } = useAuth();
-  const handleGoogleLogin = () => {
+  const { setIsAuthenticated, setIsAdmin, setIsMj } = useAuth();
+  const handleGoogleLogin = async () => {
     window.open(`${import.meta.env.VITE_API_URL}/v1/auth/google`, "_self");
     setIsAuthenticated(true);
+    const response = await fetch(
+      `${import.meta.env.VITE_API_URL}/v1/auth/verifytoken`,
+      {
+        method: "GET",
+        credentials: "include",
+      }
+    );
+    const data = await response.json();
+    if (data.isMj) {
+      setIsMj(true);
+    }
+    if (data.isAdmin) {
+      setIsAdmin(true);
+    }
   };
 
   return (

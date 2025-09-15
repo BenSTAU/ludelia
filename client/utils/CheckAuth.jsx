@@ -50,7 +50,7 @@ export default function CheckAuth({ children }) {
   }, []);
   return (
     <AuthContext.Provider
-      value={{ user, isAuthenticated, setIsAuthenticated, setUser, logout, isMj, isAdmin }}
+      value={{ user, isAuthenticated, setIsAuthenticated, setUser, logout, isMj, isAdmin, setIsMj, setIsAdmin }}
     >
       {children}
     </AuthContext.Provider>

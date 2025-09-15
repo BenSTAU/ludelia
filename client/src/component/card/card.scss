@@ -30,7 +30,19 @@
   }
   input::placeholder {
     color: var(--placeholder-text-color);
-    opacity: 1; // Pour forcer la couleur sur certains navigateurs
+    opacity: 1;
+  }
+  text-area {
+    font-family: var(--label-text-font);
+    font-size: var(--label-text-size);
+    color: var(--color-text-secondary);
+  }
+  text-area:focus {
+    outline: 2px solid var(--color-accent-1);
+  }
+  text-area::placeholder {
+    color: var(--placeholder-text-color);
+    opacity: 1;
   }
   button {
     font-family: var(--font-primary);
@@ -168,4 +180,14 @@
       margin-bottom: 2rem;
     }
   }
+}
+
+.destructiveIcon {
+  position: absolute;
+  top: -60%;
+}
+.pouchIcon {
+  position: absolute;
+  bottom: -40%;
+  right: -25%;
 }

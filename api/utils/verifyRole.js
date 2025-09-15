@@ -3,7 +3,6 @@ import pool from "./config.js";
 export async function verifyRoleMjOrAdmin(req, res, next) {
   try {
     const userRole = req.user.role;
-    console.log("User role:", userRole);
     //Vérification que l'utilisateur existe
     const existingUserQuery =
       "SELECT * FROM utilisateur WHERE id_utilisateur = $1";

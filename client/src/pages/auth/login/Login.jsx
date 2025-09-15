@@ -16,7 +16,7 @@ export default function Login() {
     emailUsername: "",
     password: "",
   });
-  const { isAuthenticated, setIsAuthenticated } = useAuth();
+  const { isAuthenticated, setIsAuthenticated, setIsMj, setIsAdmin } = useAuth();
 
   useEffect(() => {
     if (isAuthenticated) {
@@ -64,6 +64,12 @@ export default function Login() {
           id: toastId,
           duration: 2000,
         });
+        if (data.isMj) {
+          setIsMj(true);
+        }
+        if (data.isAdmin) {
+          setIsAdmin(true);
+        }
         navigate("/");
         setIsAuthenticated(true);
       } else {

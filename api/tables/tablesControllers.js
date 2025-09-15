@@ -210,6 +210,7 @@ export async function createTable(req, res) {
       .json({ message: "Table créée avec succès", table: newTable.rows[0] });
   } catch (error) {
     await client.query("ROLLBACK");
+    console.log("Error details:", error);
     res
       .status(500)
       .json({ message: "Erreur durant la création", error: error });
@@ -537,3 +538,4 @@ export async function closeTable(req, res) {
     client.release();
   }
 }
+

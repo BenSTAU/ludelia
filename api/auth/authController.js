@@ -100,6 +100,8 @@ export async function registerWithUsernameAndPassword(req, res) {
 }
 
 export async function loginWithUsernameAndPassword(req, res) {
+  let isMj = false;
+  let isAdmin = false;
   try {
     const { emailUsername, password } = req.body;
 
@@ -137,13 +139,18 @@ export async function loginWithUsernameAndPassword(req, res) {
       process.env.JWT_SECRET,
       { expiresIn: "1h" }
     );
+    if (user.rows[0].role_designation === "admin") {
+      isAdmin = true;
+    } else if (user.rows[0].role_designation === "mj") {
+      isMj = true;
+    }
 
     res.cookie("token", token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
       sameSite: process.env.SAMESITE,
     });
-    res.status(200).json({ message: "Connexion réussie", token });
+    res.status(200).json({ message: "Connexion réussie", token, isMj, isAdmin });
   } catch (error) {
     console.error(error);
     res.status(500).json({
