@@ -14,6 +14,12 @@ import ResetPassword from "./pages/auth/password/ResetPassword.jsx";
 import CheckAuth from "../utils/CheckAuth.jsx";
 import Mentions from "./pages/auth/mentions/Mentions.jsx";
 
+import MyTables from "./pages/tables/MyTables.jsx";
+
+// Routes protégées
+import { ProtectedRoute, AdminRoute, MjRoute } from "../utils/ProtectedRoutes.jsx";
+import Tables from "./pages/tables/Tables.jsx";
+
 function App() {
   return (
     <>
@@ -28,6 +34,12 @@ function App() {
             <Route path="/forgotpassword" element={<ForgottenPassword />} />
             <Route path="/resetpassword/:token" element={<ResetPassword />} />
             <Route path="/mentions" element={<Mentions />} />
+            <Route path="/tables" element={<Tables />} />
+
+            {/* Routes protégées, accessible uniquement si connecté */}
+            <Route element={<ProtectedRoute />}>
+              <Route path="/mytables" element={<MyTables />} />
+            </Route>
           </Routes>
           <Toaster />
           <Footer />

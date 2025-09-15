@@ -40,7 +40,7 @@ export async function googleCallback(req, res, next) {
         {
           id: user.id_utilisateur,
           email: user.email,
-          // Ajoute le rôle si tu veux
+          role: roleValues.rows[0].designation,
         },
         process.env.JWT_SECRET,
         { expiresIn: "1h" }

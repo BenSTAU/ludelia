@@ -51,5 +51,5 @@ authRouter.get("/verifytoken", verifyToken, async (req, res) => {
     return res.status(404).json({ message: "Utilisateur introuvable" });
   }
 
-  res.json({ user: result.rows[0] });
+  res.json({ user: result.rows[0], role: req.role });
 });

@@ -1,8 +1,8 @@
 import "./card.scss";
 
-export default function CardAuth({ height, children }) {
+export default function CardForm({ height, children }) {
   return (
-    <article className="card cardAuth">
+    <article className="card cardForm">
       <form style={{ height: height }}>{children}</form>
     </article>
   );

@@ -1,4 +1,4 @@
-import CardAuth from "../../../component/card/CardAuth";
+import CardForm from "../../../component/card/CardForm";
 import "./login.scss";
 import CardGoogle from "../../../component/card/CardGoogle";
 import dragon from "../../../assets/image/flyingdragon.svg";
@@ -87,7 +87,7 @@ export default function Login() {
     <section>
       <div>
         <h1>Connexion</h1>
-        <CardAuth height={"250px"}>
+        <CardForm height={"250px"}>
           <div>
             <label htmlFor="emailUsername">Email / Nom d'utilisateur</label>
             <input
@@ -124,7 +124,7 @@ export default function Login() {
               className="dragonImage"
             />
           </div>
-        </CardAuth>
+        </CardForm>
         <h2> Ou </h2>
         <CardGoogle />
       </div>

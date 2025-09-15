@@ -1,4 +1,4 @@
-import CardAuth from "../../../component/card/CardAuth";
+import CardForm from "../../../component/card/CardForm";
 import CardGoogle from "../../../component/card/CardGoogle";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { useState } from "react";
@@ -59,7 +59,7 @@ export default function ResetPassword() {
         <div>
           <h1>Réinitialisation du mot de passe</h1>
           <p>Veuillez renseigner votre nouveau mot de passe</p>
-          <CardAuth height={"250px"}>
+          <CardForm height={"250px"}>
             <div>
               <label htmlFor="password">Nouveau mot de passe</label>
               <input
@@ -90,7 +90,7 @@ export default function ResetPassword() {
             </button>
             <Link to="/login">Se connecter</Link>
             <Link to="/register">S'inscrire</Link>
-          </CardAuth>
+          </CardForm>
           <h2> Ou </h2>
           <CardGoogle />
         </div>

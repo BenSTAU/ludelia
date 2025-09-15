@@ -23,8 +23,18 @@ export async function getOneTable(req, res) {
 //Récupérer toutes les tables
 export async function getAllTables(req, res) {
   try {
-    const query = "select * from partie";
-    const tables = await pool.query(query);
+    const query = "SELECT p.id_partie, p.nom, p.nbr_places, p.description, p.start_at, p.end_at, u.username AS mj,  d.designation AS difficulty,  c.designation AS category,  s.designation AS status FROM partie p JOIN utilisateur u ON p.id_utilisateur = u.id_utilisateur JOIN difficulte d ON p.id_difficulte = d.id_difficulte JOIN categorie c ON p.id_categorie = c.id_categorie JOIN statut s ON p.id_statut = s.id_statut;";
+    let tables = await pool.query(query);
+
+    const duration = (start, end) => {
+      const diff = new Date(end) - new Date(start);
+      const hours = Math.floor(diff / 3600000);
+      const minutes = Math.floor((diff % 3600000) / 60000);
+      return `${hours}h ${minutes}m`;
+    };
+    tables.rows.forEach((table) => {
+      table.duration = duration(table.start_at, table.end_at);
+    });
 
     res.status(200).json(tables.rows);
   } catch (error) {
