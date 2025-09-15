@@ -1,4 +1,4 @@
-import CardAuth from "../../../component/card/CardAuth";
+import CardForm from "../../../component/card/CardForm";
 import CardGoogle from "../../../component/card/CardGoogle";
 import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
@@ -54,7 +54,7 @@ export default function ForgottenPassword() {
           veuillez renseigner votre nom d’utilisateur et votre email pour
           recevoir un lien de réinitialisation de votre mot de passe
         </p>
-        <CardAuth height={"200px"}>
+        <CardForm height={"200px"}>
           <div>
             <label htmlFor="emailUsername">Email / Nom d'utilisateur</label>
             <input
@@ -74,7 +74,7 @@ export default function ForgottenPassword() {
           </button>
           <Link to="/login">Se connecter</Link>
           <Link to="/register">S'inscrire</Link>
-        </CardAuth>
+        </CardForm>
         <h2> Ou </h2>
         <CardGoogle />
       </div>

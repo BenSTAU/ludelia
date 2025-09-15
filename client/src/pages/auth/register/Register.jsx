@@ -1,4 +1,4 @@
-import CardAuth from "../../../component/card/CardAuth";
+import CardForm from "../../../component/card/CardForm";
 import "./register.scss";
 import CardGoogle from "../../../component/card/CardGoogle";
 import fairy from "../../../assets/image/fairy.svg";
@@ -67,7 +67,7 @@ export default function Register() {
     <section>
       <div>
         <h1>Inscription</h1>
-        <CardAuth height={"600px"}>
+        <CardForm height={"600px"}>
           <div>
             <label htmlFor="username">Nom d'utilisateur</label>
             <input
@@ -159,7 +159,7 @@ export default function Register() {
           </button>
           <img src={fairy} alt="dessin d'une fée" className="fairyImage" />
           <Link to="/login">Se connecter</Link>
-        </CardAuth>
+        </CardForm>
         <h2> Ou </h2>
         <CardGoogle />
       </div>

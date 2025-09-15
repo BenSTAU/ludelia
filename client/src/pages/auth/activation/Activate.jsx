@@ -1,5 +1,5 @@
 import { useNavigate, useParams } from "react-router-dom";
-import CardAuth from "../../../component/card/CardAuth";
+import CardForm from "../../../component/card/CardForm";
 import { useEffect } from "react";
 import { useState } from "react";
 import toast from "react-hot-toast";
@@ -54,7 +54,7 @@ export default function Activate() {
   }, []);
   return (
     <section>
-      <CardAuth height={"200px"}>
+      <CardForm height={"200px"}>
         <h2>{responseMessage}</h2>
         {!success && (
           <>
@@ -77,7 +77,7 @@ export default function Activate() {
             Retour
           </button>
         )}
-      </CardAuth>
+      </CardForm>
     </section>
   );
 }

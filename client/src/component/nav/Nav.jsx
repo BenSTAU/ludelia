@@ -16,7 +16,7 @@ import userDarkMode from "../../assets/image/userDarkMode.svg";
 export default function Nav() {
   const navigate = useNavigate();
   const [menuBurgerOpen, setMenuBurgerOpen] = useState(false);
-  const { isAuthenticated, logout } = useAuth();
+  const { isAuthenticated, logout, isMj, isAdmin } = useAuth();
   const [isDarkMode, setIsDarkMode] = useState(
     localStorage.getItem("darkMode") === "true"
   );
@@ -82,17 +82,23 @@ export default function Nav() {
             <Link to="/">Accueil</Link>
           </li>
           <li>
-            <Link>Explorer les tables</Link>
+            <Link to="/tables">Explorer les tables</Link>
           </li>
-          <li>
-            <Link>Mes parties</Link>
-          </li>
-          <li>
-            <Link>Mon panel MJ</Link>
-          </li>
-          <li>
-            <Link>Mon panel Admin</Link>
-          </li>
+          {isAuthenticated && (
+            <li>
+              <Link to="/mytables">Mes parties</Link>
+            </li>
+          )}
+          {(isMj || isAdmin) && (
+            <li>
+              <Link>Mon panel MJ</Link>
+            </li>
+          )}
+          {isAdmin && (
+            <li>
+              <Link>Mon panel Admin</Link>
+            </li>
+          )}
           <div className="navDarkAndUser">
             {isDarkMode && isAuthenticated && (
               <li>

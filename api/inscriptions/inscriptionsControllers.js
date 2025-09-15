@@ -21,6 +21,25 @@ export async function getAllInscriptions(req, res) {
   }
 }
 
+// Récupérer les inscriptions valides
+export async function getValidInscriptions(req, res) {
+  try {
+    const queryInscriptions =
+      "SELECT * FROM inscription WHERE id_statut = 1";
+    const inscriptions = await pool.query(queryInscriptions);
+    const queryInvitations =
+      "SELECT * FROM invitation WHERE id_statut = 1";
+    const invitations = await pool.query(queryInvitations);
+
+    res.json({
+      inscriptions: inscriptions.rows,
+      invitations: invitations.rows,
+    });
+  } catch (error) {
+    res.status(500).json({ error: "Erreur interne du serveur" });
+  }
+}
+
 // Récupérer les inscriptions d'une table
 export async function getInscriptionsByTable(req, res) {
   const { tableId } = req.params;
@@ -28,6 +47,20 @@ export async function getInscriptionsByTable(req, res) {
     const query = `SELECT * FROM inscription JOIN invitation ON invitation.id_inscription = inscription.id_inscription WHERE id_partie = $1 `;
     const inscriptions = await pool.query(query, [tableId]);
 
+    res.json({
+      inscriptions: inscriptions.rows,
+    });
+  } catch (error) {
+    console.error("Erreur lors de la récupération des inscriptions :", error);
+    res.status(500).json({ error: "Erreur interne du serveur" });
+  }
+}
+// récupérer les inscriptions Valide d'une table
+export async function getValidInscriptionsByTable(req, res) {
+  const { tableId } = req.params;
+  try {
+    const query = `SELECT * FROM inscription JOIN invitation ON invitation.id_inscription = inscription.id_inscription WHERE id_partie = $1 AND id_statut = 1`;
+    const inscriptions = await pool.query(query, [tableId]);
     res.json({
       inscriptions: inscriptions.rows,
     });

@@ -4,6 +4,8 @@ import {
   getAllInscriptions,
   getInscriptionById,
   getInscriptionsByTable,
+  getValidInscriptions,
+  getValidInscriptionsByTable,
   updateInscription,
 } from "./inscriptionsControllers.js";
 import { verifyRoleMjOrAdmin } from "../utils/verifyRole.js";
@@ -14,6 +16,9 @@ export const inscriptionRouter = express.Router();
 // Récupérer toutes les inscriptions
 inscriptionRouter.get("/", getAllInscriptions);
 
+// Récupérer les inscriptions valides
+inscriptionRouter.get("/valide", getValidInscriptions);
+
 // Récupérer les inscriptions d'une table
 inscriptionRouter.get(
   "/tables/:tableId",
@@ -23,6 +28,10 @@ inscriptionRouter.get(
 );
 
 // Récupérer les inscriptions Valide d'une table
+inscriptionRouter.get(
+  "/tables/valide/:tableId",
+  getValidInscriptionsByTable
+);
 
 // Récupérer une inscription par ID
 inscriptionRouter.get(

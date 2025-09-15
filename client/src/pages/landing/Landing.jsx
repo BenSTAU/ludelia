@@ -13,6 +13,7 @@ export default function Landing() {
   const handleExpanded = () => {
     setExpanded(!expanded);
   };
+
   return (
     <>
       <section className="landing">
@@ -35,7 +36,9 @@ export default function Landing() {
             Rejoindre l'aventure !
           </Card>
           <img src={potion} alt="Dessin d'une potion" className="potion" />
-          <Card height={"70px"}>Explorer les tables</Card>
+          <Card height={"70px"} onClick={() => navigate("/tables")}>
+            Explorer les tables
+          </Card>
           <img
             src={adventure}
             alt="Dessin d'une carte avec une épée qui la transperce"
