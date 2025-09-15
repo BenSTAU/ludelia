@@ -91,7 +91,7 @@ export default function Nav() {
           )}
           {(isMj || isAdmin) && (
             <li>
-              <Link>Mon panel MJ</Link>
+              <Link to="/mj">Mon panel MJ</Link>
             </li>
           )}
           {isAdmin && (

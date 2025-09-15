@@ -1,4 +1,4 @@
-import { Navigate } from "react-router-dom";
+import { Navigate, Outlet } from "react-router-dom";
 import { useAuth } from "./useAuth";
 
 export function ProtectedRoute({ children }) {
@@ -6,7 +6,8 @@ export function ProtectedRoute({ children }) {
   if (!isAuthenticated) {
     return <Navigate to="/login" replace />;
   }
-  return children;
+  return <Outlet />;
+
 }
 
 export function AdminRoute({ children }) {
@@ -20,19 +21,20 @@ export function AdminRoute({ children }) {
     return <Navigate to="/" replace />;
   }
   
-  return children;
+  return <Outlet />;
+
 }
 
-export function MjRoute({ children }) {
-  const { isAuthenticated, isMj } = useAuth();
+export function MjRoute() {
+  const { isAuthenticated, isMj, isAdmin } = useAuth();
   
   if (!isAuthenticated) {
     return <Navigate to="/login" replace />;
   }
   
-  if (!isMj) {
+  if (!isAdmin && !isMj) {
     return <Navigate to="/" replace />;
   }
   
-  return children;
+  return <Outlet />;
 }

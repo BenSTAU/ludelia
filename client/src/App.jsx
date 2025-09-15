@@ -19,6 +19,7 @@ import MyTables from "./pages/tables/MyTables.jsx";
 // Routes protégées
 import { ProtectedRoute, AdminRoute, MjRoute } from "../utils/ProtectedRoutes.jsx";
 import Tables from "./pages/tables/Tables.jsx";
+import TablesMj from "./pages/tables/TablesMj.jsx";
 
 function App() {
   return (
@@ -40,6 +41,10 @@ function App() {
             <Route element={<ProtectedRoute />}>
               <Route path="/mytables" element={<MyTables />} />
             </Route>
+            <Route element={<MjRoute />}>
+              <Route path="/mj" element={<TablesMj />} />
+            </Route>
+            <Route element={<AdminRoute />}></Route>
           </Routes>
           <Toaster />
           <Footer />
