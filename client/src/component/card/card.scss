@@ -186,8 +186,27 @@
   position: absolute;
   top: -60%;
 }
+.destructiveIconAuth {
+  position: absolute;
+  top: -40%;
+}
 .pouchIcon {
   position: absolute;
   bottom: -40%;
   right: -25%;
+}
+
+.cardInscriptionForm {
+  gap: 1rem;
+  padding: 0;
+}
+
+.invitationBox {
+  display: flex;
+  flex-direction: row !important;
+  justify-content: space-between;
+  width: 100%;
+  button {
+    width: auto;
+  }
 }
