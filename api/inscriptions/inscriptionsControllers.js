@@ -81,12 +81,33 @@ export async function getInscriptionById(req, res) {
     res.status(500).json({ error: "Erreur interne du serveur" });
   }
 }
+//Récupérer toutes mes inscriptions valides et les inscriptions associées
+export async function getMyValidInscriptions(req, res) {
+  const id_utilisateur = req.id;
+  try {
+    const queryInscriptions = `SELECT * FROM inscription 
+    WHERE inscription.id_utilisateur = $1 AND inscription.id_statut = 1`;
+    const inscriptions = await pool.query(queryInscriptions, [id_utilisateur]);
+    const queryInvitations = `SELECT invitation.* FROM invitation
+    JOIN inscription ON inscription.id_inscription = invitation.id_inscription
+    WHERE inscription.id_utilisateur = $1 AND invitation.id_statut = 1`;
+    const invitations = await pool.query(queryInvitations, [id_utilisateur]);
+
+    res.json({
+      inscriptions: inscriptions.rows,
+      invitations: invitations.rows,
+    });
+  } catch (error) {
+    res.status(500).json({ error: "Erreur interne du serveur" });
+    
+  }
+}
 
 // Créer une nouvelle inscription
 export async function createInscription(req, res) {
   const client = await pool.connect();
   try {
-    const { invitations } = req.body;
+    const { invitations, message } = req.body;
     const { id_partie } = req.params;
     const id_utilisateur = req.id;
     const email = req.user.email;
@@ -122,7 +143,7 @@ export async function createInscription(req, res) {
     if (existingInscription.rows.length > 0) {
       return res
         .status(400)
-        .json({ error: "Vous êtes déjà inscrit à cette partie" });
+        .json({ message: "Vous êtes déjà inscrit à cette partie" });
     }
     //Vérifier qu'il reste assez de places
     const countInscriptions = await client.query(
@@ -133,23 +154,34 @@ export async function createInscription(req, res) {
     if (nbrInscriptions + invitations.length + 1 > table.nbr_places) {
       return res
         .status(400)
-        .json({ error: "Il n'y a pas assez de places disponibles" });
+        .json({ message: "Il n'y a pas assez de places disponibles" });
     }
 
     //Créer l'inscription
     await client.query("BEGIN");
 
     const insertInscriptionQuery =
-      "INSERT INTO inscription (id_partie, id_utilisateur, inscription_date, id_statut) VALUES ($1, $2, NOW(), $3) RETURNING *";
+      "INSERT INTO inscription (id_partie, id_utilisateur, inscription_date, id_statut, note) VALUES ($1, $2, NOW(), $3, $4) RETURNING *";
     const newInscription = await client.query(insertInscriptionQuery, [
       id_partie,
       id_utilisateur,
       statutId,
+      message,
     ]);
 
     for (const invitation of invitations) {
+      const existingInvitationQuery = "SELECT * FROM invitation WHERE email = $1 AND id_partie = $2";
+      const existingInvitation = await client.query(existingInvitationQuery, [
+        invitation.email,
+        id_partie,
+      ]);
+      if (existingInvitation.rows.length > 0) {
+        res.status(400).json({ message: `L'invitation pour ${invitation.email} existe déjà pour cette table.` });
+        await client.query("ROLLBACK");
+        return;
+      }
       const insertInvitationQuery =
-        "INSERT INTO invitation (id_inscription, email, nom, id_statut, id_partie) VALUES ($1, $2, $3, $4, $5)";
+      "INSERT INTO invitation (id_inscription, email, nom, id_statut, id_partie) VALUES ($1, $2, $3, $4, $5)";
       await client.query(insertInvitationQuery, [
         newInscription.rows[0].id_inscription,
         invitation.email,
@@ -157,6 +189,9 @@ export async function createInscription(req, res) {
         statutId,
         id_partie,
       ]);
+      if (!invitation.email) {
+        continue
+      }
 
       //Envoyer un email d'invitation à chaque invité
       const html = htmlInscriptionConfirmation(
@@ -252,9 +287,9 @@ export async function updateInscription(req, res) {
     if (Array.isArray(newInvitation) && newInvitation.length > 0) {
       for (const invitation of newInvitation) {
         const existingInvitationQuery =
-          "SELECT * FROM invitation WHERE email = $1 AND id_inscription = $2";
+          "SELECT * FROM invitation WHERE nom = $1 AND id_inscription = $2";
         const existingInvitation = await client.query(existingInvitationQuery, [
-          invitation.email,
+          invitation.nom,
           id,
         ]);
         if (existingInvitation.rows.length > 0) {
@@ -272,11 +307,10 @@ export async function updateInscription(req, res) {
           const invitationStatutId = existingStatut.rows[0].id_statut;
           //Mettre à jour l'invitation existante
           const updateInvitationQuery =
-            "UPDATE invitation SET nom = $1, id_statut = $2 WHERE email = $3 AND id_inscription = $4 AND nom = $1";
+            "UPDATE invitation SET nom = $1, id_statut = $2, id_inscription = $3 AND nom = $1";
           await client.query(updateInvitationQuery, [
             invitation.nom,
             invitationStatutId,
-            invitation.email,
             id,
           ]);
           const html = htmlInvitationCancellation(
@@ -284,10 +318,13 @@ export async function updateInscription(req, res) {
             existingTable.rows[0].nom
           );
           if (invitation.statut === "Annulé") {
+            if (!invitation.email) {
+              continue;
+            }
             //Envoyer un mail pour l'annulation de l'invitation
             await sendEmail(invitation.email, "Annulation d'invitation", html);
           }
-          continue; //Passer à l'invitation suivante
+          continue
         }
         //Ajouter une nouvelle invitation
         const insertInvitationQuery =
@@ -319,4 +356,44 @@ export async function updateInscription(req, res) {
   }
 }
 
-// Supprimer une inscription
+// Supprimer une inscription et les invitations associées
+export async function deleteInscription(req, res) {
+  const { id_partie } = req.params;
+  console.log("Suppression de l'inscription à la table :", id_partie);
+  const id = req.id;
+  const email = req.user.email;
+  const name = req.user.username || req.user.surname || "Utilisateur";
+  const client = await pool.connect();
+  try {
+    await client.query("BEGIN");
+    const existingTableQuery = "SELECT * FROM partie WHERE id_partie = $1";
+    const existingTable = await client.query(existingTableQuery, [id_partie]);
+    console.log("existingTable", existingTable);
+    if (existingTable.rows.length === 0) {
+      return res.status(404).json({ error: "Table non trouvée" });
+    }
+
+    // Supprimer l'inscription liée à l'utilisateur et la partie
+    const queryDeleteInscription = `
+    DELETE FROM inscription
+    WHERE id_utilisateur = $1 AND id_partie = $2
+    RETURNING *
+    `;
+    const deleteInscription = await client.query(queryDeleteInscription, [id, id_partie]);
+    await client.query("COMMIT");
+
+    // Envoyer un email de confirmation de désinscription à l'utilisateur
+    const html = htmlInvitationCancellation(
+            name,
+            existingTable.rows[0].nom
+          );
+    await sendEmail(email, "Désinscription", html);
+    res.status(200).json({ message: "Inscription supprimée avec succès" });
+  } catch (error) {
+    await client.query("ROLLBACK");
+    console.error("Erreur lors de la suppression de l'inscription :", error);
+    res.status(500).json({ error: "Erreur interne du serveur" });
+  } finally {
+    client.release();
+  }
+}

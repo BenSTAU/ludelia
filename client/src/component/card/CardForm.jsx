@@ -1,4 +1,4 @@
-import "./card.scss";
+import "./styles/card.scss"
 
 export default function CardForm({ height, children, cardStyle = "" }) {
   return (

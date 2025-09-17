@@ -1,5 +1,5 @@
 import minus from "../../assets/image/minus.svg";
-import "./card.scss";
+import "./styles/card.scss"
 
 export default function InvitationContent({
   index,
@@ -7,7 +7,7 @@ export default function InvitationContent({
   email,
   onChangeNom,
   onChangeEmail,
-    removeInvitation
+  removeInvitation,
 }) {
   const handleNomChange = (e) => {
     onChangeNom(e.target.value);
@@ -19,26 +19,26 @@ export default function InvitationContent({
 
   return (
     <div>
-      <div>
-        <div className="invitationBox">
-          <h2>Nom {index + 1}</h2>
-          <button>
-            <img
-              src={minus}
-              alt="Retirer l'invitation"
-              onClick={() => removeInvitation(index)}
-            />
-          </button>
-        </div>
-        <input
-          type="text"
-          name={`name-${index}`}
-          placeholder="Nom"
-          required
-          value={nom}
-          onChange={handleNomChange}
-        />
+      <div className="invitationBox">
+        <h2>Nom {index + 1}</h2>
+        <button
+          type="button"
+          onClick={() => removeInvitation(index)}
+          className="remove-btn"
+        >
+          <img src={minus} alt="Retirer l'invitation" />
+        </button>
       </div>
+
+      <input
+        type="text"
+        name={`name-${index}`}
+        placeholder="Nom"
+        required
+        value={nom}
+        onChange={handleNomChange}
+      />
+
       <div>
         <h2>Email {index + 1}</h2>
         <input

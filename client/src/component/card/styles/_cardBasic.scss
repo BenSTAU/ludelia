@@ -1,0 +1,21 @@
+// Styles pour le composant Card de base (cardLanding)
+
+.cardLanding {
+  width: 100%;
+
+  button {
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    overflow: hidden;
+    gap: 0.2rem;
+
+    p {
+      font-family: var(--font-secondary);
+      font-size: var(--font-size-md);
+      color: var(--color-text-secondary);
+      text-align: center;
+    }
+  }
+}
