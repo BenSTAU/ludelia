@@ -1,6 +1,6 @@
 import { useAuth } from "../../../utils/useAuth";
 import googleLogo from "../../assets/image/google.svg";
-import "./card.scss";
+import "./styles/card.scss"
 
 export default function CardGoogle() {
   const { setIsAuthenticated, setIsAdmin, setIsMj } = useAuth();

@@ -23,7 +23,8 @@ export async function getOneTable(req, res) {
 //Récupérer toutes les tables
 export async function getAllTables(req, res) {
   try {
-    const query = "SELECT p.id_partie, p.nom, p.nbr_places, p.description, p.start_at, p.end_at, u.username AS mj,  d.designation AS difficulty,  c.designation AS category,  s.designation AS status FROM partie p JOIN utilisateur u ON p.id_utilisateur = u.id_utilisateur JOIN difficulte d ON p.id_difficulte = d.id_difficulte JOIN categorie c ON p.id_categorie = c.id_categorie JOIN statut s ON p.id_statut = s.id_statut;";
+    const query =
+      "SELECT p.id_partie, p.nom, p.nbr_places, p.description, p.start_at, p.end_at, u.username AS mj,  d.designation AS difficulty,  c.designation AS category,  s.designation AS status FROM partie p JOIN utilisateur u ON p.id_utilisateur = u.id_utilisateur JOIN difficulte d ON p.id_difficulte = d.id_difficulte JOIN categorie c ON p.id_categorie = c.id_categorie JOIN statut s ON p.id_statut = s.id_statut;";
     let tables = await pool.query(query);
 
     const duration = (start, end) => {
@@ -35,8 +36,8 @@ export async function getAllTables(req, res) {
     tables.rows.forEach((table) => {
       table.duration = duration(table.start_at, table.end_at);
     });
-
-    res.status(200).json(tables.rows);
+    const tablesSorted = tables.rows.sort((a, b) => a.start_at - b.start_at);
+    res.status(200).json(tablesSorted);
   } catch (error) {
     res
       .status(500)
@@ -52,6 +53,72 @@ export async function getOpenTables(req, res) {
 
     res.status(200).json(tables.rows);
   } catch (error) {
+    res
+      .status(500)
+      .json({ message: "Erreur durant la récupération", error: error });
+  }
+}
+//Récupérer les tables où je suis inscrit
+export async function getMyTables(req, res) {
+  try {
+    const id_utilisateur = req.id;
+    const queryParties = `SELECT 
+    p.id_partie, 
+    p.nom, 
+    p.nbr_places, 
+    p.description, 
+    p.start_at, 
+    p.end_at, 
+    u.username AS mj,  
+    d.designation AS difficulty,  
+    c.designation AS category,  
+    s.designation AS status
+FROM partie p
+JOIN utilisateur u ON p.id_utilisateur = u.id_utilisateur
+JOIN difficulte d ON p.id_difficulte = d.id_difficulte
+JOIN categorie c ON p.id_categorie = c.id_categorie
+JOIN statut s ON p.id_statut = s.id_statut
+JOIN inscription i ON p.id_partie = i.id_partie
+JOIN statut si ON i.id_statut = si.id_statut
+WHERE i.id_utilisateur = $1
+  AND s.designation = 'Ouvert'
+  AND si.designation = 'Valide';`;
+    const tables = await pool.query(queryParties, [id_utilisateur]);
+    const tablesSorted = tables.rows.sort((a, b) => a.start_at - b.start_at);
+
+    res.status(200).json({ tables: tablesSorted });
+  } catch (error) {
+    console.error("Erreur lors de la récupération des tables :", error);
+    res
+      .status(500)
+      .json({ message: "Erreur durant la récupération", error: error });
+  }
+}
+
+//Récupérer les tables que je gère en tant que MJ avec les inscriptions et les invitations
+export async function getMyTablesMj(req, res) {
+  try {
+    const id = req.id;
+
+    const query = `SELECT p.id_partie, p.nom, p.nbr_places, p.description, p.start_at, p.end_at, u.username AS mj,  d.designation AS difficulty,  c.designation AS category,  s.designation AS status FROM partie p JOIN utilisateur u ON p.id_utilisateur = u.id_utilisateur JOIN difficulte d ON p.id_difficulte = d.id_difficulte JOIN categorie c ON p.id_categorie = c.id_categorie JOIN statut s ON p.id_statut = s.id_statut WHERE p.id_utilisateur = $1;`;
+    const tables = await pool.query(query, [id]);
+    const tablesSorted = tables.rows.sort((a, b) => a.start_at - b.start_at);
+
+    //Récupérer les inscriptions de la partie et les invitations
+    for (const table of tablesSorted) {
+      const inscriptionsQuery = `SELECT * FROM inscription JOIN utilisateur ON inscription.id_utilisateur = utilisateur.id_utilisateur WHERE id_partie = $1 AND id_statut = 1`;
+      const inscriptionsResult = await pool.query(inscriptionsQuery, [table.id_partie]);
+      table.inscriptions = inscriptionsResult.rows;
+
+      const invitationsQuery = `SELECT invitation.* FROM invitation JOIN inscription on invitation.id_inscription = inscription.id_inscription WHERE inscription.id_partie = $1 AND invitation.id_statut = 1`;
+      const invitationsResult = await pool.query(invitationsQuery, [table.id_partie]);
+      table.invitations = invitationsResult.rows;
+    }
+
+
+    res.status(200).json({ tables: tablesSorted });
+  } catch (error) {
+    console.error("Erreur lors de la récupération des tables MJ :", error);
     res
       .status(500)
       .json({ message: "Erreur durant la récupération", error: error });
@@ -538,4 +605,3 @@ export async function closeTable(req, res) {
     client.release();
   }
 }
-

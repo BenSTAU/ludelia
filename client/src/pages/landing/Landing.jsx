@@ -27,8 +27,7 @@ export default function Landing() {
         </div>
         <div className="cards">
           <Card
-            cardStyle="cta"
-            height={"70px"}
+            cardStyle="landingButton cta"
             onClick={() => {
               navigate("/login");
             }}
@@ -36,7 +35,7 @@ export default function Landing() {
             Rejoindre l'aventure !
           </Card>
           <img src={potion} alt="Dessin d'une potion" className="potion" />
-          <Card height={"70px"} onClick={() => navigate("/tables")}>
+          <Card cardStyle="landingButton" onClick={() => navigate("/tables")}>
             Explorer les tables
           </Card>
           <img
@@ -45,8 +44,8 @@ export default function Landing() {
             className="adventure"
           />
           <Card
-            height={expanded ? "auto" : "70px"}
-            cardStyle="jdr"
+            height={expanded ? "auto" : ""}
+            cardStyle="landingButton jdr"
             onClick={handleExpanded}
           >
             Le jeu de rôle, c'est quoi?

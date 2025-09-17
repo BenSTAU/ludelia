@@ -1,0 +1,23 @@
+// Styles pour le composant CardInscription
+
+.cardInscription {
+  .cardInscriptionForm {
+    gap: 1rem;
+    padding: 0;
+  }
+}
+
+// Styles pour InvitationContent
+.invitation-content {
+  .remove-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0.25rem;
+    
+    img {
+      width: 20px;
+      height: 20px;
+    }
+  }
+}

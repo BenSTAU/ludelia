@@ -5,6 +5,8 @@ import {
   createTable,
   deleteTable,
   getAllTables,
+  getMyTables,
+  getMyTablesMj,
   getOneTable,
   updateTable,
 } from "./tablesControllers.js";
@@ -16,6 +18,12 @@ export const tablesRouter = express.Router();
 export default tablesRouter;
 
 //CRUD des tables de jeu de rôle (JDR)
+
+//Récupérer les tables où je suis inscrit
+tablesRouter.get("/mytables", verifyToken, getMyTables);
+
+//Récupérer les tables où je suis MJ
+tablesRouter.get("/mj", verifyToken, verifyRoleMjOrAdmin, getMyTablesMj);
 
 //Récupérer 1 table avec id
 tablesRouter.get("/:id", getOneTable);

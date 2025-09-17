@@ -1,0 +1,169 @@
+// Styles globaux pour tous les composants Card
+
+// Styles de base pour toutes les cards
+.card {
+  position: relative;
+  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius-sm);
+  background-color: var(--color-secondary-light);
+  padding: 0.5rem;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 90%;
+
+  @media (min-width: 768px) {
+    width: 50%;
+  }
+
+  // Styles communs pour les éléments de formulaire
+  form {
+
+    label {
+      font-family: var(--label-text-font);
+      font-size: var(--label-text-size);
+      color: var(--color-text-secondary);
+    }
+  
+    input {
+      border-radius: var(--border-radius-sm);
+      border: 1px solid var(--color-border);
+      padding:0.5rem;
+      font-size: var(--placeholder-text-size);
+      color: var(--color-text-secondary);
+      height: 30px;
+      width: 100%;
+
+  
+      &:focus {
+        outline: 2px solid var(--color-accent-1);
+      }
+  
+      &::placeholder {
+        color: var(--placeholder-text-color);
+        opacity: 1;
+      }
+    }
+    input[type="datetime-local"] {
+      padding-left: 0.5rem;
+      font-family: var(--font-secondary);
+      width: 100%;
+    }
+  
+    textarea {
+      font-family: var(--font-secondary);
+      color: var(--color-text-secondary);
+      width: 100%;
+      border-radius: var(--border-radius-sm);
+      padding: 0.5rem;
+      border-color: var(--color-border);
+  
+      &:focus {
+        outline: 2px solid var(--color-accent-1);
+      }
+  
+      &::placeholder {
+        color: var(--placeholder-text-color);
+        opacity: 1;
+      }
+    }
+    select {
+      border-radius: var(--border-radius-sm);
+      border: 1px solid var(--color-border);
+      padding-left: 1rem;
+      color: var(--color-text-secondary);
+      width: 100%;
+      background-color: var(--color-secondary-light);
+      font-family: var(--font-secondary);
+      padding: 0.5rem ;
+
+      &:focus {
+        outline: 2px solid var(--color-accent-1);
+      }
+    }
+  }
+
+  button {
+    font-family: var(--font-primary);
+    font-size: var(--font-size-lg);
+    color: var(--color-text-secondary);
+    width: 100%;
+  }
+
+  article {
+    width: 100%;
+  }
+
+  h2 {
+    color: var(--color-text-secondary);
+  }
+}
+
+// Styles pour les boutons CTA
+.cta {
+  background-color: var(--color-accent-3);
+
+  button {
+    color: var(--color-secondary-light);
+  }
+}
+
+.ctaCancel {
+  width: 70% !important;
+  height: 30px;
+}
+
+.ctaUnsubscribe {
+  width: 70% !important;
+  height: 30px;
+  font-size: var(--font-size-xs) !important; 
+  background-color: var(--color-accent-2);
+}
+
+// Groupe de boutons pour les formulaires
+.buttonGroupForm {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 0.3rem;
+  width: 100%;
+  margin-top: 2rem;
+}
+
+// Styles pour les icônes destructives
+.destructiveIcon {
+  position: absolute;
+  top: -60%;
+}
+
+.destructiveIconAuth {
+  position: absolute;
+  top: -40%;
+}
+
+.destructiveIconSubbed {
+  position: absolute;
+  top: -55%;
+}
+
+.pouchIcon {
+  position: absolute;
+  bottom: -40%;
+  right: -25%;
+}
+
+// Box d'invitation
+.invitationBox {
+  display: flex;
+  flex-direction: row !important;
+  justify-content: space-between;
+  width: 100%;
+
+  button {
+    width: auto;
+  }
+}

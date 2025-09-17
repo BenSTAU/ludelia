@@ -1,4 +1,4 @@
-import "./card.scss";
+import "./styles/card.scss"
 import CardTablesContent from "./CardTableContent";
 import destructive from "../../assets/image/destructive.svg";
 import pouch from "../../assets/image/pouch.svg";
@@ -16,10 +16,15 @@ export default function Card({
   duration,
   nbrInscriptionsValides,
   onClick,
-  isAuthenticated
+  isAuthenticated,
+  subPage = false,
+  handleUnsubscribe,
+  mjPage = false,
+  handleModify,
+
 }) {
   return (
-    <article className="card cardTable" style={{ height: height }}>
+    <article className="card cardTable" style={{ minHeight: height }}>
       <div className="cardHeader" style={{ backgroundColor: backgroundHeader }}>
         <h2>{title}</h2>
         <h3>{subtitle}</h3>
@@ -30,13 +35,15 @@ export default function Card({
           <p>{description}</p>
         </div>
         <CardTablesContent>
-          <img className={isAuthenticated ? "destructiveIconAuth" : "destructiveIcon"} src={destructive} alt="dessin d'une main qui a du feu magique au dessus" />
+          <img className={!subPage ? (isAuthenticated ? "destructiveIconAuth" : "destructiveIcon") : "destructiveIconSubbed"} src={destructive} alt="dessin d'une main qui a du feu magique au dessus" />
           <h3>Date : {date}</h3>
           <h3>Durée : {duration}</h3>
           <h3>Difficulté : {difficulty}</h3>
           <h3>Catégorie : {category}</h3>
-          <h3>Nombre de places : {nbrInscriptionsValides}/{nbr_places}</h3>
-          {isAuthenticated && (nbrInscriptionsValides < nbr_places) && <button onClick={onClick} className="card cardLanding cta">S'inscrire</button>}
+          {!subPage && <h3>Nombre de places : {nbrInscriptionsValides}/{nbr_places}</h3>}
+          {isAuthenticated && !subPage && !mjPage && (nbrInscriptionsValides < nbr_places) && <button onClick={onClick} className="card cardLanding cta">S'inscrire</button>}
+          {isAuthenticated && subPage && !mjPage && <button onClick={handleUnsubscribe} className="card cardLanding ctaUnsubscribe">Se désinscrire</button>}
+          {isAuthenticated && mjPage && <button onClick={handleModify} className="card cardLanding cta">Modifier</button>}
           <img className="pouchIcon" src={pouch} alt="dessin d'une bourse" />
         </CardTablesContent>
       </div>

@@ -1,9 +1,11 @@
 import express from "express";
 import {
   createInscription,
+  deleteInscription,
   getAllInscriptions,
   getInscriptionById,
   getInscriptionsByTable,
+  getMyValidInscriptions,
   getValidInscriptions,
   getValidInscriptionsByTable,
   updateInscription,
@@ -33,6 +35,9 @@ inscriptionRouter.get(
   getValidInscriptionsByTable
 );
 
+//Récupérer toutes mes inscriptions valides et les inscriptions associées
+inscriptionRouter.get("/myInscriptions", verifyToken, getMyValidInscriptions);
+
 // Récupérer une inscription par ID
 inscriptionRouter.get(
   "/:id",
@@ -47,4 +52,5 @@ inscriptionRouter.post("/create/:id_partie", verifyToken, createInscription);
 // Mettre à jour une inscription existante
 inscriptionRouter.put("/update/:id", verifyToken, updateInscription);
 
-// Supprimer une inscription
+// Supprimer une inscription et les invitations associées
+inscriptionRouter.delete("/delete/:id_partie", verifyToken, deleteInscription);
