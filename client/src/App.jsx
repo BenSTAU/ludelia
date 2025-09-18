@@ -4,15 +4,15 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { Toaster } from "react-hot-toast";
 
 // Pages auth
-import Login from "./pages/auth/login/Login.jsx";
-import Register from "./pages/auth/register/Register.jsx";
-import Activate from "./pages/auth/activation/Activate.jsx";
-import ForgottenPassword from "./pages/auth/password/ForgottenPassword.jsx";
+import Login from "./pages/auth/Login.jsx";
+import Register from "./pages/auth/Register.jsx";
+import Activate from "./pages/auth/Activate.jsx";
+import ForgottenPassword from "./pages/auth/ForgottenPassword.jsx";
 
 import Landing from "./pages/landing/Landing.jsx";
-import ResetPassword from "./pages/auth/password/ResetPassword.jsx";
+import ResetPassword from "./pages/auth/ResetPassword.jsx";
 import CheckAuth from "../utils/CheckAuth.jsx";
-import Mentions from "./pages/auth/mentions/Mentions.jsx";
+import Mentions from "./pages/Mentions.jsx";
 
 import MyTables from "./pages/tables/MyTables.jsx";
 

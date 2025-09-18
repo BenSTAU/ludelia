@@ -1,13 +1,12 @@
-import CardForm from "../../../component/card/CardForm";
-import "./login.scss";
-import CardGoogle from "../../../component/card/CardGoogle";
-import dragon from "../../../assets/image/flyingdragon.svg";
+import CardForm from "../../component/card/CardForm";
+import CardGoogle from "../../component/card/CardGoogle";
+import dragon from "../../assets/image/flyingdragon.svg";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
-import { handleResendActivationEmail } from "../../../../utils/resendActivationMail";
-import Password from "../../../component/auth/Password";
-import { useAuth } from "../../../../utils/useAuth";
+import { handleResendActivationEmail } from "../../../utils/resendActivationMail";
+import Password from "../../component/auth/Password";
+import { useAuth } from "../../../utils/useAuth";
 
 export default function Login() {
   const navigate = useNavigate();

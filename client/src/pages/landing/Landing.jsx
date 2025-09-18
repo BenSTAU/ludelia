@@ -1,5 +1,4 @@
 import Card from "../../component/card/Card";
-import "./landing.scss";
 import potion from "../../assets/image/potion.svg";
 import adventure from "../../assets/image/adventure.svg";
 import { useNavigate } from "react-router-dom";
@@ -45,7 +44,7 @@ export default function Landing() {
           />
           <Card
             height={expanded ? "auto" : ""}
-            cardStyle="landingButton jdr"
+            cardStyle="jdr"
             onClick={handleExpanded}
           >
             Le jeu de rôle, c'est quoi?

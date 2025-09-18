@@ -1,3 +1,5 @@
+// Styles pour la page Mentions légales
+
 .mentions {
   display: flex;
   flex-direction: column;
@@ -6,9 +8,11 @@
   padding: 15dvh 1rem;
   width: 100%;
   text-align: left;
+
   h1 {
     text-align: left;
   }
+
   article {
     display: flex;
     flex-direction: column;
@@ -16,9 +20,19 @@
     gap: 0.4rem;
     width: 90%;
     text-align: left;
+
     p {
       text-align: left;
       padding: 0;
+    }
+
+    a {
+      color: var(--color-accent-1);
+      text-decoration: underline;
+
+      &:hover {
+        color: var(--color-accent-2);
+      }
     }
   }
 }

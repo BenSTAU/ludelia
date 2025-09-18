@@ -1,7 +1,10 @@
+// Styles pour la page Landing
+
 .landing {
   display: flex;
   height: auto;
   padding: 15dvh 2rem;
+
   @media (min-width: 768px) {
     align-items: flex-start;
     width: 50%;
@@ -12,14 +15,17 @@
     display: flex;
     width: 100%;
     align-items: flex-start;
+
     h1 {
       text-align: left;
       color: var(--color-accent-2);
+
       @media (min-width: 768px) {
         font-size: var(--font-size-3xl);
         width: 50%;
       }
     }
+
     p {
       padding: 0;
     }
@@ -31,6 +37,7 @@
     flex-direction: column;
     gap: 1rem;
     font-family: var(--font-primary);
+
     @media (min-width: 768px) {
       width: 70%;
       margin-left: 5%;
@@ -40,6 +47,7 @@
       position: absolute;
       left: -18%;
     }
+
     .adventure {
       position: absolute;
       right: -5%;
@@ -47,6 +55,7 @@
     }
   }
 }
+
 .landingButton {
   height: 70px;
   align-items: center;

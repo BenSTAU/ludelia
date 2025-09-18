@@ -1,6 +1,6 @@
 import pool from "../utils/config.js";
 import { getOrCreateCategory } from "../utils/getOrCreateCategory.js";
-import { htmlInvitationCancellation } from "../utils/mail.js";
+import { htmlInvitationCancellation, sendEmail } from "../utils/mail.js";
 
 //Récupérer 1 table avec id
 export async function getOneTable(req, res) {
@@ -137,9 +137,30 @@ export async function getMyTablesMj(req, res) {
   try {
     const id = req.id;
 
-    const query = `SELECT p.id_partie, p.nom, p.nbr_places, p.description, p.start_at, p.end_at, u.username AS mj,  d.designation AS difficulty,  c.designation AS category,  s.designation AS status FROM partie p JOIN utilisateur u ON p.id_utilisateur = u.id_utilisateur JOIN difficulte d ON p.id_difficulte = d.id_difficulte JOIN categorie c ON p.id_categorie = c.id_categorie JOIN statut s ON p.id_statut = s.id_statut WHERE p.id_utilisateur = $1;`;
+    const query = `SELECT p.id_partie, 
+    p.nom, p.nbr_places, 
+    p.description, 
+    p.start_at, 
+    p.end_at, 
+    u.username AS mj,  
+    d.designation AS difficulty,  
+    c.designation AS category,  
+    s.designation AS status 
+    FROM partie p 
+    JOIN utilisateur u ON p.id_utilisateur = u.id_utilisateur 
+    JOIN difficulte d ON p.id_difficulte = d.id_difficulte 
+    JOIN categorie c ON p.id_categorie = c.id_categorie 
+    JOIN statut s ON p.id_statut = s.id_statut 
+    WHERE p.id_utilisateur = $1
+    AND s.designation = 'Ouvert' ;`;
     const tables = await pool.query(query, [id]);
     const tablesSorted = tables.rows.sort((a, b) => a.start_at - b.start_at);
+    const duration = (start, end) => {
+      const diff = new Date(end) - new Date(start);
+      const hours = Math.floor(diff / 3600000);
+      const minutes = Math.floor((diff % 3600000) / 60000);
+      return `${hours}h ${minutes}m`;
+    };
 
     //Récupérer les inscriptions de la partie et les invitations
     for (const table of tablesSorted) {
@@ -150,6 +171,7 @@ export async function getMyTablesMj(req, res) {
       const invitationsQuery = `SELECT invitation.* FROM invitation JOIN inscription on invitation.id_inscription = inscription.id_inscription WHERE inscription.id_partie = $1 AND invitation.id_statut = 1`;
       const invitationsResult = await pool.query(invitationsQuery, [table.id_partie]);
       table.invitations = invitationsResult.rows;
+      table.duration = duration(table.start_at, table.end_at);
     }
 
 
@@ -269,7 +291,13 @@ export async function createTable(req, res) {
     const categorieId = existingCategorie.id_categorie;
 
     //gérer le créneau horaire
-    const existingCreneauQuery = `SELECT * FROM creneau WHERE mj = $1 AND start_at < $2 AND end_at > $3`;
+    const existingCreneauQuery = `
+    SELECT * 
+    FROM creneau 
+    WHERE mj = $1 
+    AND start_at < $3 
+    AND end_at > $2
+    `;
 
     const existingCreneau = await client.query(existingCreneauQuery, [
       id_utilisateur,
@@ -590,14 +618,13 @@ export async function closeTable(req, res) {
 
     // Mettre à jour le statut de la table
     const closeTableQuery =
-      "UPDATE partie SET id_statut = (SELECT id_statut FROM statut WHERE designation = 'fermé') WHERE id_partie = $1";
+      "UPDATE partie SET id_statut = (SELECT id_statut FROM statut WHERE designation = 'Annulé') WHERE id_partie = $1";
     await client.query(closeTableQuery, [id]);
 
-    await client.query("COMMIT");
 
     // Récupérer les inscriptions et invitations associées à la table
     const inscriptionsFetchQuery =
-      "SELECT * FROM inscription WHERE id_partie = $1";
+      "SELECT * FROM inscription JOIN utilisateur ON inscription.id_utilisateur = utilisateur.id_utilisateur WHERE id_partie = $1";
     const invitationsFetchQuery =
       "SELECT * FROM invitation WHERE id_partie = $1";
     const inscriptions = await client.query(inscriptionsFetchQuery, [id]);
@@ -605,13 +632,12 @@ export async function closeTable(req, res) {
 
     // Changer le statut en "Annulé" pour toutes les inscriptions et invitations
     const updateInscriptionStatusQuery =
-      "UPDATE inscription SET id_statut = (SELECT id_statut FROM statut WHERE designation = 'annulé') WHERE id_partie = $1";
+      "UPDATE inscription SET id_statut = (SELECT id_statut FROM statut WHERE designation = 'Annulé') WHERE id_partie = $1";
     await client.query(updateInscriptionStatusQuery, [id]);
     const updateInvitationStatusQuery =
-      "UPDATE invitation SET id_statut = (SELECT id_statut FROM statut WHERE designation = 'annulé') WHERE id_partie = $1";
+      "UPDATE invitation SET id_statut = (SELECT id_statut FROM statut WHERE designation = 'Annulé') WHERE id_partie = $1";
     await client.query(updateInvitationStatusQuery, [id]);
-    await client.query("COMMIT");
-
+    
     // Envoyer l'email pour chaque inscription
     for (const inscription of inscriptions.rows) {
       await sendEmail(
@@ -625,12 +651,14 @@ export async function closeTable(req, res) {
     }
     // Envoyer l'email pour chaque invitation
     for (const invitation of invitations.rows) {
+      if (!invitation.email) continue;
       await sendEmail(
         invitation.email,
         "Annulation de votre invitation",
         htmlInvitationCancellation(invitation.nom, existingTable.rows[0].nom)
       );
     }
+    await client.query("COMMIT");
     return res.status(200).json({ message: "Table fermée avec succès" });
   } catch (error) {
     console.error("Error details:", error);

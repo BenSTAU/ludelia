@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { useAuth } from "../../../utils/useAuth";
 import toast from "react-hot-toast";
 
-import "./tables.scss";
 import CardTable from "../../component/card/CardTable";
 import CardInscription from "../../component/card/CardInscription";
 import { formatDateTime } from "../../../utils/formatDate";

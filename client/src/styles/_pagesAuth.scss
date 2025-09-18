@@ -1,0 +1,31 @@
+// Styles pour les pages d'authentification (Login, Register, etc.)
+
+// Styles spécifiques au register
+.fairyImage {
+  position: absolute;
+  top: -13%;
+  left: 10%;
+  transform: translateX(-50%);
+}
+
+// Styles spécifiques au login
+.btnDragonContainer {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.dragonImage {
+  position: absolute;
+  bottom: -50px;
+}
+
+// Styles pour les pages de mot de passe oublié/reset
+.password-page {
+  p {
+    color: var(--color-text-secondary);
+    font-family: var(--font-secondary);
+    padding: 0 2rem;
+    text-align: center;
+  }
+}

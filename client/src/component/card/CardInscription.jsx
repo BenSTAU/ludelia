@@ -1,7 +1,7 @@
 import InvitationContent from "./InvitationContent";
 import plus from "../../assets/image/plus.svg";
 
-import "./styles/card.scss"
+import "../../styles/_cardInscription.scss";
 
 export default function CardInscription({
   title = "Titre par défaut",

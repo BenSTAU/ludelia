@@ -2,6 +2,7 @@ import express from "express";
 
 //Import des controllers
 import {
+  closeTable,
   createTable,
   deleteTable,
   getAllTables,
@@ -48,3 +49,5 @@ tablesRouter.delete(
   verifyRoleMjOrAdmin,
   deleteTable
 );
+// fermer une table
+tablesRouter.put("/close/:id", verifyToken, verifyRoleMjOrAdmin, closeTable);
