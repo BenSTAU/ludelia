@@ -2,7 +2,7 @@ import jwt from "jsonwebtoken";
 import passport from "passport";
 import pool from "../utils/config.js";
 
-export async function registerAndLoginWithGoogle(req, res, next) {
+export function registerAndLoginWithGoogle(req, res, next) {
   passport.authenticate("google", {
     scope: ["profile", "email"],
   })(req, res, next);

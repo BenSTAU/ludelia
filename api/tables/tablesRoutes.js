@@ -8,6 +8,7 @@ import {
   getMyTables,
   getMyTablesMj,
   getOneTable,
+  getOpenTables,
   updateTable,
 } from "./tablesControllers.js";
 import verifyToken from "../utils/verifyToken.js";
@@ -25,11 +26,14 @@ tablesRouter.get("/mytables", verifyToken, getMyTables);
 //Récupérer les tables où je suis MJ
 tablesRouter.get("/mj", verifyToken, verifyRoleMjOrAdmin, getMyTablesMj);
 
-//Récupérer 1 table avec id
-tablesRouter.get("/:id", getOneTable);
+//Récupérer toutes les tables ouvertes
+tablesRouter.get("/open/all", getOpenTables);
 
 //Récupérer toutes les tables
 tablesRouter.get("/", getAllTables);
+
+//Récupérer 1 table avec id
+tablesRouter.get("/:id", getOneTable);
 
 //Créer une table
 tablesRouter.post("/create", verifyToken, verifyRoleMjOrAdmin, createTable);

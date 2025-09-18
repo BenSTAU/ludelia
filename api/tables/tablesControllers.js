@@ -48,11 +48,48 @@ export async function getAllTables(req, res) {
 //récupérer les tables avec un statut ouvert
 export async function getOpenTables(req, res) {
   try {
-    const query = "SELECT * FROM partie WHERE statut = 'Ouvert'";
+    const query = `SELECT p.id_partie, 
+    p.nom, 
+    p.nbr_places, 
+    p.description, 
+    p.start_at, 
+    p.end_at, 
+    u.username AS mj,  
+    d.designation AS difficulty,  
+    c.designation AS category,  
+    s.designation AS status FROM partie p 
+    JOIN utilisateur u ON p.id_utilisateur = u.id_utilisateur 
+    JOIN difficulte d ON p.id_difficulte = d.id_difficulte 
+    JOIN categorie c ON p.id_categorie = c.id_categorie 
+    JOIN statut s ON p.id_statut = s.id_statut
+    WHERE s.designation = 'Ouvert';`;
     const tables = await pool.query(query);
 
-    res.status(200).json(tables.rows);
+    const duration = (start, end) => {
+      const diff = new Date(end) - new Date(start);
+      const hours = Math.floor(diff / 3600000);
+      const minutes = Math.floor((diff % 3600000) / 60000);
+      return `${hours}h ${minutes}m`;
+    };
+
+    const queryInvitationCountByTables = `SELECT id_partie, COUNT(*) AS invitation_count FROM invitation WHERE id_statut = 1 GROUP BY id_partie;`;
+    const invitationCounts = await pool.query(queryInvitationCountByTables);
+    const queryInscriptionsCountByTables = `SELECT id_partie, COUNT(*) AS inscription_count FROM inscription WHERE id_statut = 1 GROUP BY id_partie;`;
+    const inscriptionCounts = await pool.query(queryInscriptionsCountByTables);
+
+    tables.rows.forEach((table) => {
+      table.duration = duration(table.start_at, table.end_at);
+      const invitationCount = invitationCounts.rows.find((row) => row.id_partie === table.id_partie);
+      table.invitation_count = parseInt(invitationCount ? invitationCount.invitation_count : 0);
+
+      const inscriptionCount = inscriptionCounts.rows.find((row) => row.id_partie === table.id_partie);
+      table.inscription_count = parseInt(inscriptionCount ? inscriptionCount.inscription_count : 0);
+      table.nbrInscriptionsValides = table.invitation_count + table.inscription_count;
+    });
+
+    res.status(200).json({ tables: tables.rows });
   } catch (error) {
+    console.error("Erreur lors de la récupération des tables ouvertes :", error);
     res
       .status(500)
       .json({ message: "Erreur durant la récupération", error: error });
