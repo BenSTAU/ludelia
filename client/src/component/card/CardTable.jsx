@@ -1,4 +1,4 @@
-import "./styles/card.scss"
+import "../../styles/_cardTable.scss";
 import CardTablesContent from "./CardTableContent";
 import destructive from "../../assets/image/destructive.svg";
 import pouch from "../../assets/image/pouch.svg";

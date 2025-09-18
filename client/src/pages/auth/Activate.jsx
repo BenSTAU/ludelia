@@ -1,9 +1,9 @@
 import { useNavigate, useParams } from "react-router-dom";
-import CardForm from "../../../component/card/CardForm";
+import CardForm from "../../component/card/CardForm";
 import { useEffect } from "react";
 import { useState } from "react";
 import toast from "react-hot-toast";
-import { handleResendActivationEmail } from "../../../../utils/resendActivationMail";
+import { handleResendActivationEmail } from "../../../utils/resendActivationMail";
 
 export default function Activate() {
   const [responseMessage, setResponseMessage] = useState("");

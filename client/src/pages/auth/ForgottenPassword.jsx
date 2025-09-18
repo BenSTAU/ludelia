@@ -1,9 +1,8 @@
-import CardForm from "../../../component/card/CardForm";
-import CardGoogle from "../../../component/card/CardGoogle";
+import CardForm from "../../component/card/CardForm";
+import CardGoogle from "../../component/card/CardGoogle";
 import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import toast from "react-hot-toast";
-import "./password.scss";
 
 export default function ForgottenPassword() {
   const navigate = useNavigate();

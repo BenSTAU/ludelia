@@ -1,121 +1,220 @@
-@font-face {
-  font-family: "Cinzel";
-  src: url(../assets/font/cinzelFont.ttf) format("truetype");
-  font-weight: 400; // Regular
-}
-@font-face {
-  font-family: "Roboto";
-  src: url(../assets/font/robotoFont.ttf) format("truetype");
-}
-:root {
-  //   couleurs
-  --color-primary: #f5deb3;
-  --color-secondary-dark: #5d4037;
-  --color-secondary-light: #f8f5f0;
+// Styles globaux pour tous les composants Card
 
-  --color-text-primary: #2c1810;
-  --color-text-secondary: #5d4037;
-  --color-text-light: #f8f5f0;
-
-  --color-accent-primary: #8b4513;
-  --color-accent-1: #daa520;
-  --color-accent-2: #b8860b;
-  --color-accent-3: #d2691e;
-
-  --color-border: #daa520;
-
-  --color-input: #eae9e9;
-
-  --color-burger: #f8f5f0;
-
-  // font
-  --font-primary: "Cinzel", serif;
-  --font-secondary: "Roboto", sans-serif;
-
-  // tailles de police
-  --font-size-3xl: 48px;
-  --font-size-xxl: 40px;
-  --font-size-xl: 32px;
-  --font-size-lg: 24px;
-  --font-size-md: 20px;
-  --font-size-sm: 16px;
-  --font-size-xs: 14px;
-
-  //cartes de jeu
-  --border-radius: 37px;
-  --border-radius-sm: 12px;
-
-  //form
-  --label-text-size: 18px;
-  --label-text-font: "Cinzel", serif;
-  --placeholder-text-size: 14px;
-  --placeholder-text-color: #aaa8a8;
-}
-
-:root.dark {
-  --color-primary: #2a1810; /* Arrière-plan principal */
-  --color-secondary-dark: #3d2a1c; /* Arrière-plan header/footer */
-  --color-secondary-light: #4a3326; /* Arrière-plan des cartes */
-  --color-text-primary: #f5deb3; /* Texte principal */
-  --color-text-secondary: #e6d4a3; /* Texte secondaire */
-  --color-text-light: #c4b390; /* Texte discret */
-  --color-accent-primary: #3d2a1c; /* Accent or principal */
-  --color-accent-1: #b8860b; /* Accent or foncé */
-  --color-accent-2: #b8860b; /* Accent or foncé */
-  --color-accent-3: #b8860b; /* Accent or foncé */
-  --color-border: #5d4037; /* Bordures */
-  --color-input: #4a3326;
-  --color-burger: #c4b390;
-}
-// Reset de base
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
-a {
-  text-decoration: none;
-  color: inherit;
-}
-
-ul,
-ol {
-  list-style: none;
-}
-
-img {
-  max-width: 100%;
-  display: block;
-}
-body {
-  background-color: var(--color-primary);
-  color: var(--color-text-primary);
-}
-button {
-  cursor: pointer;
-  border: none;
-  background: none;
-}
-
-h2 {
-  font-family: var(--font-primary);
-  font-size: var(--font-size-md);
-  color: var(--color-text-primary);
-  letter-spacing: 0.1rem;
-}
-h3 {
-  font-family: var(--font-secondary);
-  font-size: var(--font-size-sm);
-  color: var(--color-text-secondary);
-}
-form {
+// Styles de base pour toutes les cards
+.card {
+  position: relative;
+  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius-sm);
+  background-color: var(--color-secondary-light);
+  padding: 0.5rem;
+  padding-left: 1rem;
+  padding-right: 1rem;
   display: flex;
   flex-direction: column;
-  justify-content: space-around;
+  align-items: center;
+  justify-content: center;
+  width: 90%;
+
+  @media (min-width: 768px) {
+    width: 50%;
+  }
+
+  // Styles communs pour les éléments de formulaire
+  label {
+    font-family: var(--label-text-font);
+    font-size: var(--label-text-size);
+    color: var(--color-text-secondary);
+  }
 
   input {
-    border: none;
-    background-color: var(--color-input);
+    border-radius: var(--border-radius-sm);
+    padding-left: 1rem;
+    color: var(--color-text-secondary);
+    height: 30px;
+    border: 1px solid var(--color-border);
+
+    &:focus {
+      outline: 2px solid var(--color-accent-1);
+    }
+
+    &::placeholder {
+      color: var(--placeholder-text-color);
+      opacity: 1;
+    }
   }
+  input[type="datetime-local"] {
+    padding-left: 1rem;
+    height: 30px;
+    font-family: var(--font-secondary);
+    border: 1px solid var(--color-border);
+    background-color: var(--color-input);
+    border-radius: var(--border-radius-sm);
+    color: var(--color-text-secondary);
+  }
+  input[type="checkbox"] {
+    border: 1.5px solid var(--color-border);
+  border-radius: 4px;
+  width: 20px;
+  height: 20px;
+  background: var(--color-input);
+  cursor: pointer;
+  
+  }
+  select {
+    padding-left: 1rem;
+    height: 30px;
+    font-family: var(--font-secondary);
+    border: 1px solid var(--color-border);
+    background-color: var(--color-input);
+    border-radius: var(--border-radius-sm);
+    color: var(--color-text-secondary);
+  }
+
+  textarea {
+    font-family: var(--font-secondary);
+    color: var(--color-text-secondary);
+    border-radius: var(--border-radius-sm);
+    border: 1px solid var(--color-border);
+    padding: 1rem;
+    background-color: var(--color-input);
+
+    &:focus {
+      outline: 2px solid var(--color-accent-1);
+    }
+
+    &::placeholder {
+      color: var(--placeholder-text-color);
+      opacity: 1;
+    }
+  }
+
+  button {
+    font-family: var(--font-primary);
+    font-size: var(--font-size-lg);
+    color: var(--color-text-secondary);
+    width: 100%;
+  }
+
+  article {
+    width: 100%;
+  }
+
+  h2 {
+    color: var(--color-text-secondary);
+  }
+}
+
+// Styles pour les boutons CTA
+.cta {
+  background-color: var(--color-accent-3);
+
+  button {
+    color: var(--color-secondary-light);
+  }
+}
+
+.ctaCancel {
+  width: 70% !important;
+  height: 30px;
+}
+
+.ctaUnsubscribe {
+  width: 70% !important;
+  height: 30px;
+  font-size: var(--font-size-xs) !important;
+  background-color: var(--color-accent-2);
+}
+
+// Groupe de boutons pour les formulaires
+.buttonGroupForm {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 0.3rem;
+  width: 100%;
+  margin-top: 2rem;
+}
+
+// Styles pour les icônes destructives
+.destructiveIcon {
+  position: absolute;
+  top: -60%;
+}
+
+.destructiveIconAuth {
+  position: absolute;
+  top: -40%;
+}
+
+.destructiveIconSubbed {
+  position: absolute;
+  top: -55%;
+}
+
+.pouchIcon {
+  position: absolute;
+  bottom: -40%;
+  right: -25%;
+}
+
+// Box d'invitation
+.invitationBox {
+  display: flex;
+  flex-direction: row !important;
+  justify-content: space-between;
+  width: 100%;
+
+  button {
+    width: auto;
+  }
+}
+
+// Styles de base pour les sections
+section {
+  min-height: 100dvh;
+  height: auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 2rem;
+  padding: 15dvh 0 10dvh 0;
+
+  h1 {
+    font-size: var(--font-size-xxl);
+    color: var(--color-accent-1);
+    text-align: center;
+  }
+
+  > div {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-direction: column;
+    gap: 2rem;
+    width: 100%;
+
+    > h2 {
+      color: var(--color-accent-1);
+      padding-top: 1rem;
+    }
+  }
+}
+
+// Styles pour les éléments de mot de passe
+.eyeIcon {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+  color: var(--color-accent-1);
+}
+
+.passwordInputContainer {
+  position: relative;
+  width: 100%;
 }

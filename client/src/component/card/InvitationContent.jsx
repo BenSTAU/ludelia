@@ -1,5 +1,4 @@
 import minus from "../../assets/image/minus.svg";
-import "./styles/card.scss"
 
 export default function InvitationContent({
   index,
@@ -20,7 +19,7 @@ export default function InvitationContent({
   return (
     <div>
       <div className="invitationBox">
-        <h2>Nom {index + 1}</h2>
+        <label htmlFor={`name-${index}`}>Nom {index + 1}</label>
         <button
           type="button"
           onClick={() => removeInvitation(index)}
@@ -40,7 +39,7 @@ export default function InvitationContent({
       />
 
       <div>
-        <h2>Email {index + 1}</h2>
+        <label htmlFor={`email-${index}`}>Email {index + 1}</label>
         <input
           type="email"
           name={`email-${index}`}

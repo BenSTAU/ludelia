@@ -1,4 +1,4 @@
-import "./mentions.scss";
+
 export default function Mentions() {
   return (
     <section className="mentions">

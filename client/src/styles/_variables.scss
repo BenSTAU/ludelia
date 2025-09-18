@@ -1,0 +1,138 @@
+// Définition des polices
+@font-face {
+  font-family: "Cinzel";
+  src: url(../assets/font/cinzelFont.ttf) format("truetype");
+  font-weight: 400; // Regular
+}
+
+@font-face {
+  font-family: "Roboto";
+  src: url(../assets/font/robotoFont.ttf) format("truetype");
+}
+
+// Variables CSS
+:root {
+  // Couleurs
+  --color-primary: #f5deb3;
+  --color-secondary-dark: #5d4037;
+  --color-secondary-light: #f8f5f0;
+
+  --color-text-primary: #2c1810;
+  --color-text-secondary: #5d4037;
+  --color-text-light: #f8f5f0;
+
+  --color-accent-primary: #8b4513;
+  --color-accent-1: #daa520;
+  --color-accent-2: #b8860b;
+  --color-accent-3: #d2691e;
+
+  --color-border: #daa520;
+  --color-input: #eae9e9;
+  --color-burger: #f8f5f0;
+
+  // Fonts
+  --font-primary: "Cinzel", serif;
+  --font-secondary: "Roboto", sans-serif;
+
+  // Tailles de police
+  --font-size-3xl: 48px;
+  --font-size-xxl: 40px;
+  --font-size-xl: 32px;
+  --font-size-lg: 24px;
+  --font-size-md: 20px;
+  --font-size-sm: 16px;
+  --font-size-xs: 14px;
+
+  // Cartes de jeu
+  --border-radius: 37px;
+  --border-radius-sm: 12px;
+
+  // Form
+  --label-text-size: 18px;
+  --label-text-font: "Cinzel", serif;
+  --placeholder-text-size: 14px;
+  --placeholder-text-color: #aaa8a8;
+}
+
+// Mode sombre
+:root.dark {
+  --color-primary: #2a1810;
+  --color-secondary-dark: #3d2a1c;
+  --color-secondary-light: #4a3326;
+  --color-text-primary: #f5deb3;
+  --color-text-secondary: #e6d4a3;
+  --color-text-light: #c4b390;
+  --color-accent-primary: #3d2a1c;
+  --color-accent-1: #b8860b;
+  --color-accent-2: #b8860b;
+  --color-accent-3: #b8860b;
+  --color-border: #5d4037;
+  --color-input: #4a3326;
+  --color-burger: #c4b390;
+}
+
+// Reset CSS de base
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+ul,
+ol {
+  list-style: none;
+}
+
+img {
+  max-width: 100%;
+  display: block;
+}
+
+body {
+  background-color: var(--color-primary);
+  color: var(--color-text-primary);
+}
+
+button {
+  cursor: pointer;
+  border: none;
+  background: none;
+}
+
+h2 {
+  font-family: var(--font-primary);
+  font-size: var(--font-size-md);
+  color: var(--color-text-primary);
+  letter-spacing: 0.1rem;
+}
+
+h3 {
+  font-family: var(--font-secondary);
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+}
+p {
+  font-family: var(--font-secondary);
+  color: var(--color-text-secondary);
+}
+form {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+
+  input {
+    border: none;
+    background-color: var(--color-input);
+  }
+  input[type="checkbox"] {
+  /* Enlève le style natif */
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  outline: none;}
+}

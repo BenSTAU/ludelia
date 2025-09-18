@@ -1,0 +1,21 @@
+// Importations des variables globales et de la charte graphique
+@use '_variables.scss';
+
+// Importation des styles globaux
+@use 'global';
+
+//Importation des styles spécifiques aux cartes
+@use 'cardBasic.scss';
+@use 'cardCreationTable';
+@use 'cardForm';
+@use 'cardGoogle';
+@use 'cardInscription';
+@use 'cardTable';
+@use 'confirmationBox';
+
+// Styles spécifiques par page
+
+@use '_pagesAuth.scss';
+@use '_pagesLanding.scss';
+@use '_pagesMentions.scss';
+@use '_pagesTables.scss';

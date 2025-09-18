@@ -1,4 +1,4 @@
-import "./styles/card.scss"
+import "../../styles/_confirmationBox.scss";
 export default function ConfirmationBox({ titre, date, onClickAccept, onClickCancel }) {
   return (
     <article className="card confirmationBox">

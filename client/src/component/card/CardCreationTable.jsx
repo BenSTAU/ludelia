@@ -1,5 +1,3 @@
-import "./styles/card.scss"
-
 export default function CardCreationTable({
   handleSubmit,
   setNom,
@@ -20,14 +18,19 @@ export default function CardCreationTable({
   id_utilisateur,
   mjs,
   resetForm,
+  isMjPage = false,
+  closeTable,
+  setCloseTable
 }) {
+  console.log (closeTable)
   return (
     <section height="auto" className="card cardCreationTable">
       <form onSubmit={handleSubmit}>
         <div className="mjHeader">
           <div>
-            <h2>Titre</h2>
+            <label htmlFor="title">Titre</label>
             <input
+              id="title"
               type="text"
               className="titleInput"
               placeholder="Titre de la table"
@@ -35,8 +38,10 @@ export default function CardCreationTable({
               onChange={(e) => setNom(e.target.value)}
             />
           </div>
-          <h3>Maître du jeu</h3>
+          <div>
+          <label htmlFor="id_utilisateur">Maître du jeu</label>
           <select
+            id="id_utilisateur"
             value={id_utilisateur}
             onChange={(e) => setId_utilisateur(e.target.value)}
           >
@@ -47,12 +52,14 @@ export default function CardCreationTable({
               </option>
             ))}
           </select>
+          </div>
         </div>
 
         <div className="mjBody">
           <div>
-            <h2>Description</h2>
+            <label htmlFor="description">Description</label>
             <textarea
+              id="description"
               className="descriptionInput"
               placeholder="Description de la table"
               rows={4}
@@ -62,8 +69,9 @@ export default function CardCreationTable({
           </div>
 
           <div>
-            <h2>Date et heure de début</h2>
+            <label htmlFor="start_at">Début</label>
             <input
+              id="start_at"
               type="datetime-local"
               value={start_at}
               onChange={(e) => setStart_at(e.target.value)}
@@ -71,8 +79,9 @@ export default function CardCreationTable({
           </div>
 
           <div>
-            <h2>Date et heure de fin</h2>
+            <label htmlFor="end_at">Fin</label>
             <input
+              id="end_at"
               type="datetime-local"
               value={end_at}
               onChange={(e) => setEnd_at(e.target.value)}
@@ -80,8 +89,9 @@ export default function CardCreationTable({
           </div>
 
           <div>
-            <h2>Catégorie</h2>
+            <label htmlFor="categorie">Catégorie</label>
             <input
+              id="categorie"
               type="text"
               placeholder="Catégorie de la table"
               value={categorie}
@@ -90,8 +100,9 @@ export default function CardCreationTable({
           </div>
 
           <div>
-            <h2>Nombre de joueurs</h2>
+            <label htmlFor="nbr_places">Nombre de joueurs</label>
             <input
+              id="nbr_places"
               type="number"
               min="1"
               max="20"
@@ -101,9 +112,9 @@ export default function CardCreationTable({
           </div>
 
           <div>
-            <h2>Difficulté</h2>
+            <label htmlFor="difficulte">Difficulté</label>
             <select
-              name="difficulte"
+              id="difficulte"
               value={difficulte}
               onChange={(e) => setDifficulte(e.target.value)}
             >
@@ -113,13 +124,28 @@ export default function CardCreationTable({
               <option value="Expert">Expert</option>
             </select>
           </div>
+          {isMjPage && (
+            <div className="closeTable">
+              <label htmlFor="closeTableid">Fermer la table</label>
+              <input
+                type="checkbox"
+                checked={closeTable}
+                onChange={() => setCloseTable(!closeTable)
+                }
+              />
+            </div>
+          )}
         </div>
 
         <div className="buttonGroupForm">
           <button type="submit" className="card cardLanding cta">
-            Créer la table
+            {isMjPage ? "Modifier la table" : "Créer la table"}
           </button>
-          <button type="button" className="card cardLanding ctaCancel" onClick={resetForm}>
+          <button
+            type="button"
+            className="card cardLanding ctaCancel"
+            onClick={resetForm}
+          >
             Annuler
           </button>
         </div>

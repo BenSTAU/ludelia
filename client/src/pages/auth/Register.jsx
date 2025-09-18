@@ -1,10 +1,9 @@
-import CardForm from "../../../component/card/CardForm";
-import "./register.scss";
-import CardGoogle from "../../../component/card/CardGoogle";
-import fairy from "../../../assets/image/fairy.svg";
+import CardForm from "../../component/card/CardForm";
+import CardGoogle from "../../component/card/CardGoogle";
+import fairy from "../../assets/image/fairy.svg";
 import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
-import Password from "../../../component/auth/Password";
+import Password from "../../component/auth/Password";
 
 export default function Register() {
   const navigate = useNavigate();
