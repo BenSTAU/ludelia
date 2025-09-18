@@ -359,16 +359,14 @@ export async function updateInscription(req, res) {
 // Supprimer une inscription et les invitations associées
 export async function deleteInscription(req, res) {
   const { id_partie } = req.params;
-  console.log("Suppression de l'inscription à la table :", id_partie);
   const id = req.id;
   const email = req.user.email;
-  const name = req.user.username || req.user.surname || "Utilisateur";
+  const name = req.user.username || req.user.surname;
   const client = await pool.connect();
   try {
     await client.query("BEGIN");
     const existingTableQuery = "SELECT * FROM partie WHERE id_partie = $1";
     const existingTable = await client.query(existingTableQuery, [id_partie]);
-    console.log("existingTable", existingTable);
     if (existingTable.rows.length === 0) {
       return res.status(404).json({ error: "Table non trouvée" });
     }

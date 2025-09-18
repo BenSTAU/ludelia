@@ -10,8 +10,6 @@ import { formatDateTime } from "../../../utils/formatDate";
 export default function Tables() {
   // --- États principaux ---
   const [tables, setTables] = useState([]); // Liste des tables
-  const [inscriptions, setInscriptions] = useState([]); // Inscriptions validées
-  const [invitations, setInvitations] = useState([]); // Invitations liées aux inscriptions
   const [myTables, setMyTables] = useState([]); // Mes tables où je suis inscrit
   const { isAuthenticated, user } = useAuth();
   const myId = user && user.id_utilisateur ? user.id_utilisateur : null;
@@ -59,9 +57,10 @@ export default function Tables() {
   };
   const fetchTables = async () => {
     try {
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/v1/tables`);
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/v1/tables/open/all`);
       const data = await response.json();
-      setTables(data);
+      setTables(data.tables);
+      console.log(data.tables);
     } catch (error) {
       console.error("Erreur lors du chargement des tables :", error);
     } finally {
@@ -183,11 +182,8 @@ export default function Tables() {
           category={table.category}
           nbr_places={table.nbr_places}
           duration={table.duration}
-          nbrInscriptionsValides={
-            inscriptions.filter((i) => i.id_partie === table.id_partie).length +
-            invitations.filter((inv) => inv.id_partie === table.id_partie)
-              .length
-          }
+          nbrInscriptionsValides={String(table.nbrInscriptionsValides)}
+            
           onClick={() => handleInscriptionClick(table)}
           isAuthenticated={isAuthenticated}
         />

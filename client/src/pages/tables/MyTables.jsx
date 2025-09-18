@@ -17,9 +17,7 @@ export default function MyTables() {
     setSelectedTable(table);
     setShowConfirmationBox(true);
     setPreviousScrollY(window.scrollY);
-    setTimeout(() => {
-      window.scrollTo({ top: 0, behavior: "smooth" });
-    }, 100);
+    window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
   const handleCloseForm = () => {
@@ -42,8 +40,6 @@ export default function MyTables() {
       const data = await response.json();
       if (response.ok) {
         toast.success("Désinscription réussie !", { id: toastId, duration: 2000 });
-        fetchMyTables();
-        fetchInscriptions();
         handleCloseForm();
       } else {
         toast.error(`Erreur lors de la désinscription : ${data.error}`, { id: toastId, duration: 2000 });
