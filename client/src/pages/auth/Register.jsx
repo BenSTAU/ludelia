@@ -1,13 +1,19 @@
+import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
+
+// Import des composants locaux
 import CardForm from "../../component/card/CardForm";
 import CardGoogle from "../../component/card/CardGoogle";
-import fairy from "../../assets/image/fairy.svg";
-import { Link, useNavigate } from "react-router-dom";
-import { useState } from "react";
 import Password from "../../component/auth/Password";
-import toast from "react-hot-toast";
+
+// Import des assets
+import fairy from "../../assets/image/fairy.svg";
 
 export default function Register() {
   const navigate = useNavigate();
+
+  // États pour les champs du formulaire d'inscription
   const [formData, setFormData] = useState({
     username: "",
     name: "",
@@ -18,10 +24,10 @@ export default function Register() {
     telephone: "",
   });
 
+  // Gère la soumission du formulaire d'inscription
   async function handleRegister(event) {
     event.preventDefault();
     if (formData.password !== formData.confirmPassword) {
-      console.log('Mot de passe:', formData.password, 'Confirmation:', formData.confirmPassword);
       toast.error("Les mots de passe ne correspondent pas", {
         position: "top-center",
         autoClose: 2000,
@@ -32,6 +38,7 @@ export default function Register() {
     const toastId = toast.loading("Inscription en cours...");
 
     try {
+      // Appel API pour créer un nouvel utilisateur
       const response = await fetch(
         `${import.meta.env.VITE_API_URL}/v1/auth/register`,
         {
@@ -64,6 +71,7 @@ export default function Register() {
     }
   }
 
+  // Affichage principal du formulaire d'inscription
   return (
     <section>
       <div>
@@ -131,7 +139,6 @@ export default function Register() {
               setFormData={setFormData}
             />
           </div>
-
           <div>
             <label htmlFor="confirmPassword">Confirmer le mot de passe</label>
             <Password

@@ -1,72 +1,45 @@
 import { useEffect, useState } from "react";
-import { useAuth } from "../../../utils/useAuth";
 import toast from "react-hot-toast";
 
+// Import du hook d'authentification global
+import { useAuth } from "../../../utils/useAuth";
+
+// Import des composants locaux
 import CardTable from "../../component/card/CardTable";
 import CardInscription from "../../component/card/CardInscription";
+
+// Import des utilitaires
 import { formatDateTime } from "../../../utils/formatDate";
 
 export default function Tables() {
   // --- États principaux ---
-  const [tables, setTables] = useState([]); // Liste des tables
-  const [myTables, setMyTables] = useState([]); // Mes tables où je suis inscrit
+  const [tables, setTables] = useState([]); // Liste des tables ouvertes
+  const [myTables, setMyTables] = useState([]); // Identifiants des tables où l'utilisateur est inscrit
   const { isAuthenticated, user } = useAuth();
   const myId = user && user.id_utilisateur ? user.id_utilisateur : null;
-  const [previousScrollY, setPreviousScrollY] = useState(0);
 
-  // --- État pour le formulaire d'inscription ---
+  // --- États pour le formulaire d'inscription ---
   const [selectedTable, setSelectedTable] = useState(null); // Table sélectionnée pour inscription
   const [showInscriptionForm, setShowInscriptionForm] = useState(false); // Affichage du formulaire
-  const [newInvitations, setNewInvitations] = useState([]); // Nouvelles invitations du formulaire
+  const [newInvitations, setNewInvitations] = useState([]); // Invitations ajoutées dans le formulaire
   const [message, setMessage] = useState(""); // Message optionnel pour l'inscription
+  const [previousScrollY, setPreviousScrollY] = useState(0);
 
-  // --- Gestion de l'ouverture du formulaire d'inscription ---
-  const handleInscriptionClick = (table) => {
-    setSelectedTable(table);
-    setShowInscriptionForm(true);
-    setPreviousScrollY(window.scrollY);
-    setTimeout(() => {
-      window.scrollTo({ top: 0, behavior: "smooth" });
-    }, 100);
-  };
-
-  // --- Gestion de la fermeture du formulaire d'inscription ---
-  const handleCloseInscriptionForm = () => {
-    setShowInscriptionForm(false);
-    setSelectedTable(null);
-    setNewInvitations([]);
-    window.scrollTo({ top: previousScrollY, behavior: "smooth" });
-  };
-
-  // --- Gestion des invitations ---
-  const handleInvitationChange = (index, field, value) => {
-    setNewInvitations((prev) =>
-      prev.map((invitation, i) =>
-        i === index ? { ...invitation, [field]: value } : invitation
-      )
-    );
-  };
-
-  const addNewInvitation = () => {
-    setNewInvitations((prev) => [...prev, { nom: "", email: "" }]);
-  };
-
-  const removeInvitation = (index) => {
-    setNewInvitations((prev) => prev.filter((_, i) => i !== index));
-  };
+  // --- Récupération des données depuis l'API ---
+  // Récupère la liste des tables ouvertes
   const fetchTables = async () => {
     try {
       const response = await fetch(`${import.meta.env.VITE_API_URL}/v1/tables/open/all`);
       const data = await response.json();
       setTables(data.tables);
-      console.log(data.tables);
     } catch (error) {
-      console.error("Erreur lors du chargement des tables :", error);
+      // Erreur lors du chargement des tables
     } finally {
       toast.dismiss("loadingTables");
     }
   };
 
+  // Récupère les inscriptions valides de l'utilisateur
   const fetchInscriptions = async () => {
     try {
       const response = await fetch(
@@ -76,12 +49,51 @@ export default function Tables() {
       const myInscriptions = data.inscriptions.filter(
         (inscription) => String(inscription.id_utilisateur) === String(myId)
       );
-      setMyTables(myInscriptions.map(i => i.id_partie));
+      setMyTables(myInscriptions.map((i) => i.id_partie));
     } catch (error) {
-      console.error("Erreur lors du chargement des inscriptions :", error);
+      // Erreur lors du chargement des inscriptions
     }
   };
 
+  // --- Gestion du formulaire d'inscription ---
+  // Ouvre le formulaire d'inscription et mémorise la position de scroll
+  const handleInscriptionClick = (table) => {
+    setSelectedTable(table);
+    setShowInscriptionForm(true);
+    setPreviousScrollY(window.scrollY);
+    setTimeout(() => {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }, 100);
+  };
+
+  // Ferme le formulaire d'inscription et restaure la position de scroll
+  const handleCloseInscriptionForm = () => {
+    setShowInscriptionForm(false);
+    setSelectedTable(null);
+    setNewInvitations([]);
+    window.scrollTo({ top: previousScrollY, behavior: "smooth" });
+  };
+
+  // Met à jour une invitation dans le formulaire
+  const handleInvitationChange = (index, field, value) => {
+    setNewInvitations((prev) =>
+      prev.map((invitation, i) =>
+        i === index ? { ...invitation, [field]: value } : invitation
+      )
+    );
+  };
+
+  // Ajoute une nouvelle invitation au formulaire
+  const addNewInvitation = () => {
+    setNewInvitations((prev) => [...prev, { nom: "", email: "" }]);
+  };
+
+  // Retire une invitation du formulaire
+  const removeInvitation = (index) => {
+    setNewInvitations((prev) => prev.filter((_, i) => i !== index));
+  };
+
+  // Soumet le formulaire d'invitations à l'API
   const handleSubmitInvitations = async () => {
     toast.loading("Envoi des inscriptions...", { id: "submitInscription" });
     if (!selectedTable) {
@@ -96,9 +108,7 @@ export default function Tables() {
     });
 
     const response = await fetch(
-      `${import.meta.env.VITE_API_URL}/v1/inscriptions/create/${
-        selectedTable.id_partie
-      }`,
+      `${import.meta.env.VITE_API_URL}/v1/inscriptions/create/${selectedTable.id_partie}`,
       {
         method: "POST",
         credentials: "include",
@@ -129,10 +139,9 @@ export default function Tables() {
     fetchInscriptions();
   };
 
-  // --- Récupération des données depuis l'API ---
+  // --- Effets de récupération des données ---
   useEffect(() => {
     toast.loading("Chargement des tables...", { id: "loadingTables" });
-
     fetchTables();
   }, []);
 
@@ -141,7 +150,8 @@ export default function Tables() {
     fetchInscriptions();
   }, [myId]);
 
-  const filteredTables = tables.filter(table => !myTables.includes(table.id_partie));
+  // Filtre les tables pour exclure celles où l'utilisateur est déjà inscrit
+  const filteredTables = tables.filter((table) => !myTables.includes(table.id_partie));
 
   // --- Rendu ---
   return (
@@ -152,9 +162,7 @@ export default function Tables() {
       {showInscriptionForm && selectedTable && (
         <CardInscription
           title={`Inscription à: ${selectedTable.nom}`}
-          subtitle={`MJ: ${selectedTable.mj} - ${formatDateTime(
-            selectedTable.start_at
-          )}`}
+          subtitle={`MJ: ${selectedTable.mj} - ${formatDateTime(selectedTable.start_at)}`}
           invitations={newInvitations}
           onInvitationChange={handleInvitationChange}
           onAddInvitation={addNewInvitation}
@@ -180,7 +188,6 @@ export default function Tables() {
           nbr_places={table.nbr_places}
           duration={table.duration}
           nbrInscriptionsValides={String(table.nbrInscriptionsValides)}
-            
           onClick={() => handleInscriptionClick(table)}
           isAuthenticated={isAuthenticated}
         />

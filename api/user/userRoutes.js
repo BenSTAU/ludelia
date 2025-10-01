@@ -5,5 +5,5 @@ import { getMjInfo } from "./userControllers.js";
 
 export const userRouter = express.Router();
 
-//Récupérer les informations des mj
+// Récupère les informations des MJ si l'utilisateur est MJ ou admin
 userRouter.get("/mj", verifyToken, verifyRoleMjOrAdmin, getMjInfo);

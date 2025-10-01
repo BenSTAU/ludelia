@@ -1,3 +1,4 @@
+// Formate une date en chaîne lisible pour l'affichage côté français
 export function formatDate(dateString) {
   const date = new Date(dateString);
   return date

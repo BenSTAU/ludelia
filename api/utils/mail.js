@@ -1,6 +1,7 @@
+// Import de la librairie tierce pour l'envoi d'emails
 import nodemailer from "nodemailer";
 
-// Fonction utilitaire pour envoyer un email via le service Gmail, avec authentification par variables d'environnement.
+// Envoie un email via le service Gmail avec les paramètres d'environnement
 export const sendEmail = async (to, subject, html) => {
   const transporter = nodemailer.createTransport({
     service: "gmail",
@@ -19,7 +20,7 @@ export const sendEmail = async (to, subject, html) => {
   await transporter.sendMail(mailOptions);
 };
 
-// Génère le contenu HTML pour l'email d'activation de compte.
+// Génère le contenu HTML pour l'email d'activation de compte
 export const htmlActivateAccount = (surname, link) => {
   return `
     <!DOCTYPE html>
@@ -38,7 +39,7 @@ export const htmlActivateAccount = (surname, link) => {
   `;
 };
 
-// Génère le contenu HTML pour l'email de réinitialisation de mot de passe.
+// Génère le contenu HTML pour l'email de réinitialisation de mot de passe
 export const htmlResetPassword = (surname, link) => {
   return `
     <!DOCTYPE html>
@@ -58,6 +59,7 @@ export const htmlResetPassword = (surname, link) => {
   `;
 };
 
+// Génère le contenu HTML pour l'email de confirmation d'inscription à une table
 export const htmlInscriptionConfirmation = (
   surname,
   tableName,
@@ -82,6 +84,7 @@ export const htmlInscriptionConfirmation = (
   `;
 };
 
+// Génère le contenu HTML pour l'email d'annulation d'invitation
 export const htmlInvitationCancellation = (surname, tableName) => {
   return `
     <!DOCTYPE html>

@@ -1,18 +1,24 @@
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+
+// Import des composants locaux
 import Card from "../../component/card/Card";
+
+// Import des assets
 import potion from "../../assets/image/potion.svg";
 import adventure from "../../assets/image/adventure.svg";
-import { useNavigate } from "react-router-dom";
 import arrow from "../../assets/image/arrow.svg";
-import { useState } from "react";
 
 export default function Landing() {
   const [expanded, setExpanded] = useState(false);
   const navigate = useNavigate();
 
+  // Gère l'affichage du texte explicatif sur le jeu de rôle
   const handleExpanded = () => {
     setExpanded(!expanded);
   };
 
+  // Affichage principal de la page d'accueil
   return (
     <>
       <section className="landing">
