@@ -22,7 +22,6 @@ export default function CardCreationTable({
   closeTable,
   setCloseTable
 }) {
-  console.log (closeTable)
   return (
     <section height="auto" className="card cardCreationTable">
       <form onSubmit={handleSubmit}>
@@ -42,7 +41,7 @@ export default function CardCreationTable({
           <label htmlFor="id_utilisateur">Maître du jeu</label>
           <select
             id="id_utilisateur"
-            value={id_utilisateur}
+            value={id_utilisateur || ""}
             onChange={(e) => setId_utilisateur(e.target.value)}
           >
             <option value="">Sélectionner un MJ</option>
@@ -115,7 +114,7 @@ export default function CardCreationTable({
             <label htmlFor="difficulte">Difficulté</label>
             <select
               id="difficulte"
-              value={difficulte}
+              value={difficulte || ""}
               onChange={(e) => setDifficulte(e.target.value)}
             >
               <option value="">Sélectionner une difficulté</option>

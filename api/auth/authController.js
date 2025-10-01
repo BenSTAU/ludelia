@@ -135,6 +135,9 @@ export async function loginWithUsernameAndPassword(req, res) {
         id: user.rows[0].id_utilisateur,
         role: user.rows[0].role_designation,
         email: user.rows[0].email,
+        surname: user.rows[0].surname,
+        name: user.rows[0].name_user,
+        username: user.rows[0].username,
       },
       process.env.JWT_SECRET,
       { expiresIn: "1h" }
@@ -177,6 +180,7 @@ export async function ActivateAccount(req, res) {
     if (user.is_activated) {
       return res.status(400).json({ message: "Compte déjà activé" });
     }
+    await client.query("BEGIN");
 
     //Activation du compte
     const updateQuery =

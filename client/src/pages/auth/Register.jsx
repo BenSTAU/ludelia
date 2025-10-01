@@ -4,6 +4,7 @@ import fairy from "../../assets/image/fairy.svg";
 import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import Password from "../../component/auth/Password";
+import toast from "react-hot-toast";
 
 export default function Register() {
   const navigate = useNavigate();
@@ -20,6 +21,7 @@ export default function Register() {
   async function handleRegister(event) {
     event.preventDefault();
     if (formData.password !== formData.confirmPassword) {
+      console.log('Mot de passe:', formData.password, 'Confirmation:', formData.confirmPassword);
       toast.error("Les mots de passe ne correspondent pas", {
         position: "top-center",
         autoClose: 2000,
@@ -134,7 +136,7 @@ export default function Register() {
             <label htmlFor="confirmPassword">Confirmer le mot de passe</label>
             <Password
               id="confirmPassword"
-              name="confirmPassword"
+              nom="confirmPassword"
               placeholder="Confirmez votre mot de passe"
               formData={formData}
               setFormData={setFormData}

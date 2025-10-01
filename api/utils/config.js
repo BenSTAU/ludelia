@@ -15,6 +15,7 @@ const pool = new Pool({
   password: process.env.DB_PASSWORD,
   database: process.env.DB_NAME,
   ssl: { rejectUnauthorized: false },
+  max: 10,
 });
 
 export default pool;
