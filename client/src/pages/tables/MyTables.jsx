@@ -41,6 +41,7 @@ export default function MyTables() {
       if (response.ok) {
         toast.success("Désinscription réussie !", { id: toastId, duration: 2000 });
         handleCloseForm();
+        fetchMyTables();
       } else {
         toast.error(`Erreur lors de la désinscription : ${data.error}`, { id: toastId, duration: 2000 });
       }

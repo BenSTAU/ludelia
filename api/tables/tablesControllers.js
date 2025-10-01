@@ -322,7 +322,10 @@ export async function createTable(req, res) {
 
     //Créer la table de jeu de rôle
     const createTable =
-      "INSERT INTO partie (nom, nbr_places, start_at, end_at, description, id_creneau, id_evenement, id_utilisateur, id_statut, id_difficulte, id_categorie) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11) RETURNING *";
+      `INSERT INTO partie 
+      (nom, nbr_places, start_at, end_at, description, id_creneau, id_evenement, id_utilisateur, id_statut, id_difficulte, id_categorie) 
+      VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11) 
+      RETURNING *`;
     const newTable = await client.query(createTable, [
       nom,
       nbr_places,

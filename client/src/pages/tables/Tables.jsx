@@ -77,8 +77,6 @@ export default function Tables() {
         (inscription) => String(inscription.id_utilisateur) === String(myId)
       );
       setMyTables(myInscriptions.map(i => i.id_partie));
-      setInscriptions(data.inscriptions);
-      setInvitations(data.invitations);
     } catch (error) {
       console.error("Erreur lors du chargement des inscriptions :", error);
     }

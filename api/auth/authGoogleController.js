@@ -41,6 +41,9 @@ export async function googleCallback(req, res, next) {
           id: user.id_utilisateur,
           email: user.email,
           role: roleValues.rows[0].designation,
+          surname: user.rows[0].surname,
+          name: user.rows[0].name_user,
+          username: user.rows[0].username,
         },
         process.env.JWT_SECRET,
         { expiresIn: "1h" }

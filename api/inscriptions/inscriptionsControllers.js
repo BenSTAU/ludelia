@@ -111,6 +111,7 @@ export async function createInscription(req, res) {
     const { id_partie } = req.params;
     const id_utilisateur = req.id;
     const email = req.user.email;
+    const userSurname = req.user.surname || req.user.name || "Utilisateur";
     const statutId = 1;
 
     if (!email) {
@@ -205,7 +206,7 @@ export async function createInscription(req, res) {
 
     //Envoyer un email de confirmation d'inscription à l'utilisateur
     const html = htmlInscriptionConfirmation(
-      req.user.surname,
+      userSurname,
       table.nom,
       formatDate(table.start_at),
       formatDate(table.end_at)
@@ -378,7 +379,7 @@ export async function deleteInscription(req, res) {
     RETURNING *
     `;
     const deleteInscription = await client.query(queryDeleteInscription, [id, id_partie]);
-    await client.query("COMMIT");
+    
 
     // Envoyer un email de confirmation de désinscription à l'utilisateur
     const html = htmlInvitationCancellation(
@@ -386,6 +387,7 @@ export async function deleteInscription(req, res) {
             existingTable.rows[0].nom
           );
     await sendEmail(email, "Désinscription", html);
+    await client.query("COMMIT");
     res.status(200).json({ message: "Inscription supprimée avec succès" });
   } catch (error) {
     await client.query("ROLLBACK");

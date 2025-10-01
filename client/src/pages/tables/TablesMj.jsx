@@ -68,7 +68,6 @@ export default function TablesMj() {
         { method: "GET", credentials: "include" }
       );
       const data = await response.json();
-      console.log(data.tables);
       if (response.ok) setTables(data.tables);
     } catch (error) {
       console.error("Erreur lors de la récupération des tables :", error);
@@ -133,6 +132,7 @@ export default function TablesMj() {
         if (response.ok) {
           toast.success(data.message, { id: toastId, duration: 2000 });
           resetForm();
+          fetchTables();
         } else {
           toast.error(data.message, { id: toastId, duration: 2000 });
         }
