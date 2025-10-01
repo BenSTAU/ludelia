@@ -1,13 +1,15 @@
+// Import globaux (node_modules, librairies tierces)
 import pg from "pg";
 import dotenv from "dotenv";
-dotenv.config();
-
-
 import passport from "passport";
 import { Strategy as GoogleStrategy } from "passport-google-oauth20";
 
+// Chargement des variables d'environnement
+dotenv.config();
+
 const { Pool } = pg;
 
+// Création du pool PostgreSQL
 const pool = new Pool({
   host: process.env.DB_HOST,
   port: process.env.DB_PORT,
@@ -20,9 +22,7 @@ const pool = new Pool({
 
 export default pool;
 
-
-//config GoogleAuth
-
+// Configuration de la stratégie Google Auth avec Passport
 passport.use(
   new GoogleStrategy(
     {
@@ -34,25 +34,58 @@ passport.use(
       try {
         const client = await pool.connect();
 
-        //chercher l'utilisateur
-        const queryUser =
-          "SELECT * FROM utilisateur u JOIN provider p ON u.id_utilisateur = p.id_utilisateur WHERE p.provider_id = $1 or u.email = $2";
-        const existingUser = await client.query(queryUser, [profile.id, profile.emails[0].value]);
+        // Recherche de l'utilisateur existant par provider_id ou email
+        const queryUser = `
+          SELECT *
+          FROM utilisateur u
+          JOIN provider p ON u.id_utilisateur = p.id_utilisateur
+          WHERE p.provider_id = $1
+          OR u.email = $2
+        `;
+        const existingUser = await client.query(queryUser, [
+          profile.id,
+          profile.emails[0].value,
+        ]);
 
-        if (existingUser.rows.length > 0 && existingUser.rows[0].provider_name === "google") {
-          // L'utilisateur existe déjà
+        if (
+          existingUser.rows.length > 0 &&
+          existingUser.rows[0].provider_name === "google"
+        ) {
           client.release();
           return done(null, existingUser.rows[0]);
-        } else if (existingUser.rows.length > 0 && existingUser.rows[0].provider_name == "classique") {
-          // L'utilisateur existe avec un autre provider
+        } else if (
+          existingUser.rows.length > 0 &&
+          existingUser.rows[0].provider_name == "classique"
+        ) {
           client.release();
           return done(new Error("provider = classique"));
         }
 
-        //créer un nouveau utilisateur
+        // Création d'un nouvel utilisateur si non existant
         await client.query("BEGIN");
-        const queryInsert = `INSERT INTO utilisateur (username, email, is_activated, name_user, surname, telephone, id_role, activation_token) 
-           VALUES ($1, $2, true, $3, $4, $5, 1, NULL) RETURNING id_utilisateur`;
+        const queryInsert = `
+          INSERT INTO utilisateur (
+            username,
+            email,
+            is_activated,
+            name_user,
+            surname,
+            telephone,
+            id_role,
+            activation_token
+          )
+          VALUES (
+            $1,
+            $2,
+            true,
+            $3,
+            $4,
+            $5,
+            1,
+            NULL
+          )
+          RETURNING id_utilisateur
+        `;
         const result = await client.query(queryInsert, [
           profile.displayName,
           profile.emails[0].value,
@@ -60,17 +93,25 @@ passport.use(
           profile.name.givenName,
           profile.phone,
         ]);
-
         const userId = result.rows[0].id_utilisateur;
 
-        const providerQuery = `INSERT INTO provider (provider_name, provider_id, id_utilisateur) 
-       VALUES ($1, $2, $3)`;
-
+        const providerQuery = `
+          INSERT INTO provider (
+            provider_name,
+            provider_id,
+            id_utilisateur
+          )
+          VALUES (
+            $1,
+            $2,
+            $3
+          )
+        `;
         await client.query(providerQuery, ["google", profile.id, userId]);
 
         await client.query("COMMIT");
 
-        // Récupérer l'utilisateur complet
+        // Récupère l'utilisateur complet après création
         const newUser = await client.query(
           "SELECT * FROM utilisateur WHERE id_utilisateur = $1",
           [userId]
@@ -79,8 +120,11 @@ passport.use(
         client.release();
         return done(null, newUser.rows[0]);
       } catch (error) {
-
-        console.error("Error fetching user:", error);
+        // Annule la transaction en cas d'erreur lors de la création
+        if (typeof client !== "undefined") {
+          await client.query("ROLLBACK");
+          client.release();
+        }
         done(error);
       }
     }

@@ -1,17 +1,23 @@
+// Import globaux React et librairies tierces
+import { useState } from "react";
+import { useNavigate, Link } from "react-router-dom";
+import toast from "react-hot-toast";
+import { CiMenuBurger } from "react-icons/ci";
+import { MdDarkMode, MdOutlineDarkMode } from "react-icons/md";
+
+// Import des composants locaux
 import "./nav.scss";
+
+// Import des assets
 import logo from "../../assets/image/logo.svg";
 import logoDarkTheme from "../../assets/image/logoDarkTheme.svg";
-import { CiMenuBurger } from "react-icons/ci";
-import { useNavigate, Link } from "react-router-dom";
 import login from "../../assets/image/login.svg";
 import logoutButton from "../../assets/image/logout.svg";
-import { useState } from "react";
-import toast from "react-hot-toast";
-import { useAuth } from "../../../utils/useAuth";
-import { MdDarkMode } from "react-icons/md";
-import { MdOutlineDarkMode } from "react-icons/md";
 import user from "../../assets/image/user.svg";
 import userDarkMode from "../../assets/image/userDarkMode.svg";
+
+// Import des utilitaires
+import { useAuth } from "../../../utils/useAuth";
 
 export default function Nav() {
   const navigate = useNavigate();
@@ -21,6 +27,7 @@ export default function Nav() {
     localStorage.getItem("darkMode") === "true"
   );
 
+  // Active ou désactive le mode sombre et sauvegarde le choix en localStorage
   const handleDarkModeToggle = () => {
     const root = document.documentElement;
     if (isDarkMode) {
@@ -34,6 +41,7 @@ export default function Nav() {
     }
   };
 
+  // Déconnecte l'utilisateur via l'API et met à jour l'état global
   async function handleLogout() {
     const toastId = toast.loading("Deconnexion en cours...");
 
@@ -126,7 +134,6 @@ export default function Nav() {
               )}
             </li>
           </div>
-
           <li>
             <img
               src={isAuthenticated ? logoutButton : login}

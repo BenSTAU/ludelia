@@ -1,15 +1,21 @@
-import CardForm from "../../component/card/CardForm";
-import CardGoogle from "../../component/card/CardGoogle";
-import { Link, useNavigate, useParams } from "react-router-dom";
 import { useState } from "react";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import toast from "react-hot-toast";
 
+// Import des composants locaux
+import CardForm from "../../component/card/CardForm";
+import CardGoogle from "../../component/card/CardGoogle";
+
+// Récupère le token de réinitialisation depuis l'URL
 export default function ResetPassword() {
   const navigate = useNavigate();
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
   const token = useParams().token;
 
+  // États pour les champs du formulaire
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+
+  // Gère la soumission du formulaire de réinitialisation du mot de passe
   async function handleResetPassword(e) {
     e.preventDefault();
 
@@ -21,6 +27,7 @@ export default function ResetPassword() {
     const toastId = toast.loading("Réinitialisation du mot de passe...");
 
     try {
+      // Appel API pour réinitialiser le mot de passe
       const response = await fetch(
         `${import.meta.env.VITE_API_URL}/v1/auth/resetpassword/${token}`,
         {
@@ -52,6 +59,7 @@ export default function ResetPassword() {
     }
   }
 
+  // Affichage principal de la page de réinitialisation
   return (
     <>
       <section>

@@ -1,14 +1,16 @@
-import { createContext, useEffect } from "react";
-import { useState } from "react";
+import { createContext, useEffect, useState } from "react";
 
+// Création du contexte d'authentification global
 export const AuthContext = createContext();
 
 export default function CheckAuth({ children }) {
+  // États d'authentification utilisateur
   const [user, setUser] = useState([]);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isMj, setIsMj] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false);
 
+  // Déconnexion utilisateur et reset des états
   const logout = async () => {
     setIsAuthenticated(false);
     setUser(null);
@@ -16,6 +18,7 @@ export default function CheckAuth({ children }) {
     setIsAdmin(false);
   };
 
+  // Vérifie l'authentification via l'API à chaque chargement
   async function checkAuth() {
     try {
       const response = await fetch(
@@ -45,12 +48,25 @@ export default function CheckAuth({ children }) {
       setIsAdmin(false);
     }
   }
+
+  // Vérifie l'authentification au montage du composant
   useEffect(() => {
     checkAuth();
   }, []);
+
   return (
     <AuthContext.Provider
-      value={{ user, isAuthenticated, setIsAuthenticated, setUser, logout, isMj, isAdmin, setIsMj, setIsAdmin }}
+      value={{
+        user,
+        isAuthenticated,
+        setIsAuthenticated,
+        setUser,
+        logout,
+        isMj,
+        isAdmin,
+        setIsMj,
+        setIsAdmin,
+      }}
     >
       {children}
     </AuthContext.Provider>

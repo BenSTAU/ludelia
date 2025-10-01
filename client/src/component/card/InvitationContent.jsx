@@ -8,10 +8,12 @@ export default function InvitationContent({
   onChangeEmail,
   removeInvitation,
 }) {
+  // Met à jour le nom de l'invité dans le formulaire
   const handleNomChange = (e) => {
     onChangeNom(e.target.value);
   };
 
+  // Met à jour l'email de l'invité dans le formulaire
   const handleEmailChange = (e) => {
     onChangeEmail(e.target.value);
   };

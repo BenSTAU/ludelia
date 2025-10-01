@@ -1,8 +1,11 @@
+import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import CardForm from "../../component/card/CardForm";
-import { useEffect } from "react";
-import { useState } from "react";
 import toast from "react-hot-toast";
+
+// Import des composants locaux
+import CardForm from "../../component/card/CardForm";
+
+// Import des utilitaires
 import { handleResendActivationEmail } from "../../../utils/resendActivationMail";
 
 export default function Activate() {
@@ -12,6 +15,7 @@ export default function Activate() {
   const navigate = useNavigate();
   const token = useParams().token;
 
+  // Tente d'activer le compte via l'API avec le token
   async function activateAccount() {
     const toastId = toast.loading("Activation en cours...");
 
@@ -49,9 +53,13 @@ export default function Activate() {
     }
   }
 
+  // Lance l'activation du compte au montage du composant
   useEffect(() => {
     activateAccount();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  // Affichage principal de la page d'activation
   return (
     <section>
       <CardForm height={"200px"}>

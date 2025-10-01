@@ -2,15 +2,21 @@ import { useEffect, useState } from "react";
 import plus from "../../assets/image/plus.svg";
 import toast from "react-hot-toast";
 
-import "../../styles/_pagesTables.scss"
+// Import des styles globaux et spécifiques
+import "../../styles/_pagesTables.scss";
+
+// Import des composants locaux
 import CardCreationTable from "../../component/card/CardCreationTable";
 import CardTable from "../../component/card/CardTable";
+
+// Import des utilitaires
 import { formatDateTime } from "../../../utils/formatDate";
 import { useAuth } from "../../../utils/useAuth";
 
 export default function TablesMj() {
   const { isAuthenticated } = useAuth();
-  // --- États du formulaire ---
+
+  // États du formulaire de création/modification de table
   const [nom, setNom] = useState("");
   const [nbr_places, setNbr_places] = useState(1);
   const [start_at, setStart_at] = useState("");
@@ -20,19 +26,19 @@ export default function TablesMj() {
   const [difficulte, setDifficulte] = useState("");
   const [categorie, setCategorie] = useState("");
 
-  // --- États annexes ---
+  // États annexes
   const [mjs, setMjs] = useState([]); // Liste des MJs
   const [addingTable, setAddingTable] = useState(false); // Affichage du formulaire
   const [tables, setTables] = useState([]); // Liste des tables
   const [showModifyBox, setShowModifyBox] = useState(false); // Affichage de la boîte de modification
   const [selectedTable, setSelectedTable] = useState(null); // Table sélectionnée pour modification
   const [closeTable, setCloseTable] = useState(false); // État pour fermer la table
-  const statut = 'Ouvert'
+  const statut = "Ouvert";
 
-  // --- Constantes fixes ---
+  // Constantes fixes
   const id_evenement = 1; // Évènement unique pour le moment
 
-  // --- Réinitialisation du formulaire ---
+  // Réinitialisation du formulaire après création ou modification
   function resetForm() {
     setNom("");
     setNbr_places(1);
@@ -48,7 +54,7 @@ export default function TablesMj() {
     setCloseTable(false);
   }
 
-  // --- Récupération des MJs depuis l’API ---
+  // Appel API : récupération des MJs
   async function fetchMjs() {
     try {
       const response = await fetch(
@@ -58,9 +64,11 @@ export default function TablesMj() {
       const data = await response.json();
       if (response.ok) setMjs(data);
     } catch (error) {
-      console.error("Erreur lors de la récupération des MJs :", error);
+      // Erreur lors de la récupération des MJs
     }
   }
+
+  // Appel API : récupération des tables MJ
   async function fetchTables() {
     try {
       const response = await fetch(
@@ -70,18 +78,19 @@ export default function TablesMj() {
       const data = await response.json();
       if (response.ok) setTables(data.tables);
     } catch (error) {
-      console.error("Erreur lors de la récupération des tables :", error);
+      // Erreur lors de la récupération des tables
     }
   }
+
+  //Récupération des données MJ/tables au montage
   useEffect(() => {
     fetchTables();
     fetchMjs();
   }, []);
-  // --- Soumission du formulaire ---
+
+  // Soumission du formulaire de création de table
   const handleSubmitCreate = (e) => {
     e.preventDefault();
-
-    // Vérification rapide des champs
     if (
       !nom ||
       !start_at ||
@@ -97,12 +106,10 @@ export default function TablesMj() {
       });
       return;
     }
-
-    // Mise en forme de la catégorie
     const categorieFormatted =
       categorie.charAt(0).toUpperCase() + categorie.slice(1).toLowerCase();
 
-    // Création de la table via API
+    // Appel API : création de la table
     const createTable = async () => {
       const toastId = toast.loading("Création de la table en cours...");
       try {
@@ -126,8 +133,6 @@ export default function TablesMj() {
             }),
           }
         );
-            console.log (nom, nbr_places, start_at, end_at, description, id_utilisateur, statut, difficulte, categorieFormatted, id_evenement)
-
         const data = await response.json();
         if (response.ok) {
           toast.success(data.message, { id: toastId, duration: 2000 });
@@ -137,13 +142,18 @@ export default function TablesMj() {
           toast.error(data.message, { id: toastId, duration: 2000 });
         }
       } catch (error) {
-        console.error(data.error, error);
+        toast.error("Erreur lors de la création de la table", {
+          id: toastId,
+          duration: 2000,
+        });
       }
     };
 
     createTable();
     fetchTables();
   };
+
+  // Conversion date ISO en format local pour input
   function toDatetimeLocal(dateString) {
     if (!dateString) return "";
     const date = new Date(dateString);
@@ -152,11 +162,13 @@ export default function TablesMj() {
     return localDate.toISOString().slice(0, 16);
   }
 
+  // Récupère l'id du MJ à partir de son nom
   function getMjIdFromName(mjName) {
     const mj = mjs.find((mj) => mj.username === mjName);
     return mj ? mj.id_utilisateur : "";
   }
 
+  // Préremplit le formulaire de modification avec les données de la table sélectionnée
   const handleModifyButton = (table) => {
     setNom(table.nom);
     setNbr_places(table.nbr_places);
@@ -168,13 +180,13 @@ export default function TablesMj() {
     setCategorie(table.category);
     setAddingTable(false);
     setShowModifyBox(true);
-    setSelectedTable(table); // Enregistrer la table sélectionnée
+    setSelectedTable(table);
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
+  // Soumission du formulaire de modification de table
   const handleSubmitModify = async (e, table) => {
     e.preventDefault();
-    // Vérification rapide des champs
     if (
       !nom ||
       !start_at ||
@@ -191,7 +203,7 @@ export default function TablesMj() {
       return;
     }
     if (closeTable) {
-      // Fermer la table via API
+      // Appel API : fermeture de la table
       const toastId = toast.loading("Fermeture de la table en cours...");
       try {
         const response = await fetch(
@@ -213,56 +225,54 @@ export default function TablesMj() {
       }
       fetchTables();
       resetForm();
-      return; // On ne fait pas la modification si on ferme
+      return;
     }
     const toastId = toast.loading("Modification de la table en cours...");
-    // Mise en forme de la catégorie
     const categorieFormatted =
       categorie.charAt(0).toUpperCase() + categorie.slice(1).toLowerCase();
-    // Modification de la table via API
-       try {
-        const response = await fetch(
-          `${import.meta.env.VITE_API_URL}/v1/tables/update/${table.id_partie}`,
-          {
-            method: "PUT",
-            credentials: "include",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-              nom,
-              nbr_places,
-              start_at,
-              end_at,
-              description,
-              id_utilisateur,
-              statut,
-              difficulte,
-              categorie: categorieFormatted,
-              id_evenement,
-            }),
-          }
-        );
-
-        const data = await response.json();
-        if (response.ok) {
-          toast.success(data.message, { id: toastId, duration: 2000 });
-          resetForm();
-        } else {
-          toast.error(data.message, { id: toastId, duration: 2000 });
+    // Appel API : modification de la table
+    try {
+      const response = await fetch(
+        `${import.meta.env.VITE_API_URL}/v1/tables/update/${table.id_partie}`,
+        {
+          method: "PUT",
+          credentials: "include",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            nom,
+            nbr_places,
+            start_at,
+            end_at,
+            description,
+            id_utilisateur,
+            statut,
+            difficulte,
+            categorie: categorieFormatted,
+            id_evenement,
+          }),
         }
-      } catch (error) {
-        console.error("Erreur lors de la modification de la table :", error);
+      );
+      const data = await response.json();
+      if (response.ok) {
+        toast.success(data.message, { id: toastId, duration: 2000 });
+        resetForm();
+      } else {
+        toast.error(data.message, { id: toastId, duration: 2000 });
       }
-    
+    } catch (error) {
+      toast.error("Erreur lors de la modification de la table", {
+        id: toastId,
+        duration: 2000,
+      });
+    }
     fetchTables();
     resetForm();
+  };
 
-
-  }
-  // --- Rendu ---
+  // Rendu principal de la page
   return (
     <section>
       <h1>Tables MJ</h1>
-
       {/* En-tête avec bouton d’ajout */}
       <div className="tablesHeader">
         <h2>Mes tables</h2>
@@ -270,7 +280,6 @@ export default function TablesMj() {
           <img src={plus} alt="icone pour ajouter" />
         </button>
       </div>
-
       {/* Formulaire de création */}
       {addingTable && (
         <CardCreationTable
@@ -322,6 +331,7 @@ export default function TablesMj() {
           setCloseTable={setCloseTable}
         />
       )}
+      {/* Affichage des tables MJ */}
       {tables.map((table) => (
         <CardTable
           key={table.id_partie}

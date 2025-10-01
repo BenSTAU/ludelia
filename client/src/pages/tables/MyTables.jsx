@@ -1,18 +1,25 @@
 import { useEffect, useState } from "react";
-import CardTable from "../../component/card/CardTable";
-import { useAuth } from "../../../utils/useAuth";
-import ConfirmationBox from "../../component/card/ConfirmationBox";
 import toast from "react-hot-toast";
 
+// Import des composants locaux
+import CardTable from "../../component/card/CardTable";
+import ConfirmationBox from "../../component/card/ConfirmationBox";
+
+// Import du hook d'authentification global
+import { useAuth } from "../../../utils/useAuth";
 
 export default function MyTables() {
-  const {isAuthenticated} = useAuth();
+  const { isAuthenticated } = useAuth();
+
+  // --- États principaux ---
   const [myTables, setMyTables] = useState([]);
   const [previousScrollY, setPreviousScrollY] = useState(0);
 
+  // --- États pour la confirmation de désinscription ---
   const [showConfirmationBox, setShowConfirmationBox] = useState(false);
   const [selectedTable, setSelectedTable] = useState(null);
 
+  // Ouvre la boîte de confirmation et mémorise la position de scroll
   const handleUnsubscribeButton = (table) => {
     setSelectedTable(table);
     setShowConfirmationBox(true);
@@ -20,15 +27,16 @@ export default function MyTables() {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
+  // Ferme la boîte de confirmation et restaure la position de scroll
   const handleCloseForm = () => {
     setShowConfirmationBox(false);
     setSelectedTable(null);
     window.scrollTo({ top: previousScrollY, behavior: "smooth" });
   };
 
+  // Soumet la désinscription à l'API et met à jour la liste des tables
   const handleUnsubscribe = async () => {
     const toastId = toast.loading("Désinscription en cours...");
-    console.log("Désinscription de la table :", selectedTable);
     try {
       const response = await fetch(
         `${import.meta.env.VITE_API_URL}/v1/inscriptions/delete/${selectedTable.id_partie}`,
@@ -47,9 +55,10 @@ export default function MyTables() {
       }
     } catch (error) {
       toast.error("Erreur lors de la désinscription", { id: toastId, duration: 2000 });
-      console.error("Erreur lors de la désinscription :", error);
     }
-  }
+  };
+
+  // Récupère la liste des tables de l'utilisateur depuis l'API
   const fetchMyTables = async () => {
     try {
       const response = await fetch(
@@ -61,16 +70,18 @@ export default function MyTables() {
       );
       const data = await response.json();
       setMyTables(data.tables);
-      console.log("Mes tables :", data.tables);
     } catch (error) {
-      console.error("Erreur lors de la récupération des tables :", error);
+      // Erreur lors de la récupération des tables
     }
   };
+
+  // Récupère les tables au montage du composant
   useEffect(() => {
     fetchMyTables();
   }, []);
 
-    function formatDateTime(dateString) {
+  // Formate la date pour l'affichage
+  function formatDateTime(dateString) {
     const date = new Date(dateString);
     return date.toLocaleString("fr-FR", {
       day: "2-digit",
@@ -80,15 +91,19 @@ export default function MyTables() {
       minute: "2-digit",
     });
   }
+
+  // --- Rendu ---
   return (
     <section>
       <h1>Mes parties</h1>
-      {showConfirmationBox && <ConfirmationBox
-        titre={selectedTable?.nom}
-        onClickAccept={handleUnsubscribe}
-        onClickCancel={handleCloseForm}
-        date={formatDateTime(selectedTable?.start_at)}
-      />}
+      {showConfirmationBox && (
+        <ConfirmationBox
+          titre={selectedTable?.nom}
+          onClickAccept={handleUnsubscribe}
+          onClickCancel={handleCloseForm}
+          date={formatDateTime(selectedTable?.start_at)}
+        />
+      )}
 
       {myTables.map((table) => (
         <CardTable

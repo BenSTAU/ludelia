@@ -1,19 +1,24 @@
+// Import globaux React et librairies tierces
+import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
+
+// Import des composants locaux
 import CardForm from "../../component/card/CardForm";
 import CardGoogle from "../../component/card/CardGoogle";
-import { Link, useNavigate } from "react-router-dom";
-import { useState } from "react";
-import toast from "react-hot-toast";
 
 export default function ForgottenPassword() {
   const navigate = useNavigate();
   const [emailUsername, setEmailUsername] = useState("");
 
+  // Gère la soumission du formulaire de demande de réinitialisation
   async function handleForgottenPassword(e) {
     e.preventDefault();
 
     const toastId = toast.loading("Envoi de l'email...");
 
     try {
+      // Appel API pour envoyer le lien de réinitialisation
       const response = await fetch(
         `${import.meta.env.VITE_API_URL}/v1/auth/forgotpassword`,
         {
@@ -45,6 +50,7 @@ export default function ForgottenPassword() {
     }
   }
 
+  // Affichage principal du formulaire de demande de réinitialisation
   return (
     <section>
       <div>

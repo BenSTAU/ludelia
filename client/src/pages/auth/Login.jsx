@@ -1,11 +1,18 @@
+// Import des composants locaux
 import CardForm from "../../component/card/CardForm";
 import CardGoogle from "../../component/card/CardGoogle";
+import Password from "../../component/auth/Password";
+
+// Import des assets
 import dragon from "../../assets/image/flyingdragon.svg";
+
+// Import globaux React et librairies tierces
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
+
+// Import des utilitaires
 import { handleResendActivationEmail } from "../../../utils/resendActivationMail";
-import Password from "../../component/auth/Password";
 import { useAuth } from "../../../utils/useAuth";
 
 export default function Login() {
@@ -17,12 +24,14 @@ export default function Login() {
   });
   const { isAuthenticated, setIsAuthenticated, setIsMj, setIsAdmin } = useAuth();
 
+  // Redirige vers l'accueil si l'utilisateur est déjà authentifié
   useEffect(() => {
     if (isAuthenticated) {
       navigate("/");
     }
   }, [isAuthenticated, navigate]);
 
+  // Affiche les erreurs liées à la connexion Google ou au compte existant
   useEffect(() => {
     const params = new URLSearchParams(location.search);
     if (params.get("google") === "false") {
@@ -40,12 +49,14 @@ export default function Login() {
     }
   }, [location, navigate]);
 
+  // Gère la soumission du formulaire de connexion
   async function handleLogin(e) {
     e.preventDefault();
 
     const toastId = toast.loading("Connexion en cours...");
 
     try {
+      // Appel API pour authentifier l'utilisateur
       const response = await fetch(
         `${import.meta.env.VITE_API_URL}/v1/auth/login`,
         {
@@ -76,6 +87,7 @@ export default function Login() {
           id: toastId,
           duration: 2000,
         });
+        // Si le compte n'est pas activé, propose la réactivation par email
         if (response.status === 403) {
           handleResendActivationEmail(e, formData.emailUsername, navigate);
         }
@@ -88,6 +100,7 @@ export default function Login() {
     }
   }
 
+  // Affichage principal du formulaire de connexion
   return (
     <section>
       <div>
@@ -122,7 +135,6 @@ export default function Login() {
             <button onClick={handleLogin} className="btn btnLogin">
               Connexion
             </button>
-
             <img
               src={dragon}
               alt="dessin d'un dragon"
