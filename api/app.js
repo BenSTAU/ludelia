@@ -26,8 +26,8 @@ process.env.NODE_ENV === "production" &&
 // Configuration CORS pour autoriser le client et les cookies
 app.use(
   cors({
-    origin: process.env.CLIENT_URL,
-    credentials: true,
+    origin: ["https://ludelia.onrender.com", "http://localhost:5173"],
+    credentials: true, // Permet l'envoi des cookies
   })
 );
 app.use(express.json());
