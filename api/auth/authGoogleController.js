@@ -50,15 +50,23 @@ export async function googleCallback(req, res, next) {
       `;
       const roleValues = await pool.query(roleQuery, [user.email]);
 
-      // Génère le JWT pour l'utilisateur
+      // Vérifie que le rôle existe avant de l'utiliser pour éviter une erreur TypeError
+      if (!roleValues.rows.length) {
+        return res
+          .status(400)
+          .redirect(`${process.env.CLIENT_URL}/?google=role_not_found`);
+      }
+
+      // Prépare les données utilisateur pour le JWT
+      // Utilise directement les propriétés de l'objet user
       const token = jwt.sign(
         {
           id: user.id_utilisateur,
           email: user.email,
           role: roleValues.rows[0].designation,
-          surname: user.rows[0].surname,
-          name: user.rows[0].name_user,
-          username: user.rows[0].username,
+          surname: user.surname || "utilisateur",
+          name: user.name_user || "utilisateur",
+          username: user.username || "utilisateur",
         },
         process.env.JWT_SECRET,
         { expiresIn: "1h" }
