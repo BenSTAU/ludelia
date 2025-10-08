@@ -289,6 +289,7 @@ export async function createInscription(req, res) {
     res.status(201).json({ message: "Inscription créée avec succès" });
   } catch (error) {
     await client.query("ROLLBACK");
+    console.error("Error creating inscription:", error);
     res.status(500).json({ error: "Erreur interne du serveur" });
   } finally {
     client.release();
@@ -500,6 +501,7 @@ export async function deleteInscription(req, res) {
     res.status(200).json({ message: "Inscription supprimée avec succès" });
   } catch (error) {
     await client.query("ROLLBACK");
+    console.error("Error deleting inscription:", error);
     res.status(500).json({ error: "Erreur interne du serveur" });
   } finally {
     client.release();
