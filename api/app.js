@@ -47,15 +47,16 @@ async function connect() {
       .connect()
       .then((client) => {
         client.release();
+        console.log("Connecté à la base de données PostgreSQL");
       })
       .catch((err) => {
-        // Erreur lors de la connexion à la base de données
+        console.error("Erreur de connexion à la base de données", err.stack);
       });
     app.listen(process.env.PORT, () => {
-      // Le serveur démarre sur le port défini dans .env
+      console.log(`Serveur démarré sur le port ${process.env.PORT}`);
     });
   } catch (error) {
-    // Erreur lors du démarrage du serveur
+    console.error("Erreur lors du démarrage du serveur", error);
   }
 }
 connect();
