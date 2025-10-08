@@ -86,8 +86,9 @@ export async function getOpenTables(req, res) {
       table.inscription_count = parseInt(inscriptionCount ? inscriptionCount.inscription_count : 0);
       table.nbrInscriptionsValides = table.invitation_count + table.inscription_count;
     });
+    const tablesSorted = tables.rows.sort((a, b) => a.start_at - b.start_at);
 
-    res.status(200).json({ tables: tables.rows });
+    res.status(200).json({ tables: tablesSorted });
   } catch (error) {
     console.error("Erreur lors de la récupération des tables ouvertes :", error);
     res
