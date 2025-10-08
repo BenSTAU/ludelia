@@ -472,6 +472,8 @@ export async function deleteInscription(req, res) {
   const client = await pool.connect();
   try {
     await client.query("BEGIN");
+
+    // Vérifie que la table existe
     const existingTableQuery = `
       SELECT *
       FROM partie
@@ -479,8 +481,30 @@ export async function deleteInscription(req, res) {
     `;
     const existingTable = await client.query(existingTableQuery, [id_partie]);
     if (existingTable.rows.length === 0) {
+      await client.query("ROLLBACK");
       return res.status(404).json({ error: "Table non trouvée" });
     }
+
+    // Récupère l'inscription à supprimer
+    const getInscriptionQuery = `
+      SELECT id_inscription
+      FROM inscription
+      WHERE id_utilisateur = $1
+        AND id_partie = $2
+    `;
+    const inscriptionRes = await client.query(getInscriptionQuery, [id, id_partie]);
+    if (inscriptionRes.rows.length === 0) {
+      await client.query("ROLLBACK");
+      return res.status(404).json({ error: "Inscription non trouvée" });
+    }
+    const id_inscription = inscriptionRes.rows[0].id_inscription;
+
+    // Supprime d'abord les invitations liées à cette inscription
+    const deleteInvitationsQuery = `
+      DELETE FROM invitation
+      WHERE id_inscription = $1
+    `;
+    await client.query(deleteInvitationsQuery, [id_inscription]);
 
     // Supprime l'inscription liée à l'utilisateur et la partie
     const queryDeleteInscription = `
@@ -497,11 +521,11 @@ export async function deleteInscription(req, res) {
       existingTable.rows[0].nom
     );
     await sendEmail(email, "Désinscription", html);
+
     await client.query("COMMIT");
     res.status(200).json({ message: "Inscription supprimée avec succès" });
   } catch (error) {
     await client.query("ROLLBACK");
-    console.error("Error deleting inscription:", error);
     res.status(500).json({ error: "Erreur interne du serveur" });
   } finally {
     client.release();
