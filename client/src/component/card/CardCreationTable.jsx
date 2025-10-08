@@ -37,7 +37,7 @@ export default function CardCreationTable({
               onChange={(e) => setNom(e.target.value)}
             />
           </div>
-          <div>
+        <div>
           <label htmlFor="id_utilisateur">Maître du jeu</label>
           <select
             id="id_utilisateur"
